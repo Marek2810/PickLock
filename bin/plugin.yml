@@ -1,0 +1,10 @@
+main: me.Marek2810.PickLock.Main
+name: PickLock
+version: 1.2
+author: Marek2810
+api-version: 1.17
+
+commands:
+  picklock:
+  zamok:
+  kluc:

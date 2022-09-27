@@ -1,0 +1,66 @@
+messages:
+  reload: "&aPlugin &6PickLock &abol úspešne znovu načitaný!"
+  unknown-cmd: "&cNeznámy príkaz."
+  error: "&cNiečo je špatne..."
+  ussage: "&cPoužitie: &7"
+  unknown-key: "&cNeznámy typ kľúča."
+  console-cannot-do-that: "&cToto nemôžeš ako konzola."
+  get-key: "&aPráve si získal &6kľúč&a."
+  get-hook: "&aPráve si získal &6šperhák&a."
+  on-unlock: "&aOdmokol si."
+  on-lock: "&aZamkol si."
+  wrong-key: "&cKľúč nepasuje do zámku."
+  key-is-used: "&cKľúč už bol použiťý."
+  on-first-lock: "&aÚspešne si nasadil zámok!"
+  is-locked: "&cJe zamknuté."
+  no-lock: "&eBlok nemá zámok."
+  on-brake-with-lock: "&cNemôžeš rozbiť zamknutý blok."
+  to-remove-lock: "&eKlikni pravým pre odstrenenie zámku."  
+  remove-lock: "&aZámok bol úspešne odstranený."
+  remove-lock-not-owned: "&cNemôžeš odstrániť cudzí zámok"
+  to-lock-info: "&eKlikni pravým pre získanie informacií o zámku." 
+  not-locked-block: "&cBlok na ktorý si klikol nie je zamknutý."
+  
+keys:
+  basic:
+    material: STICK
+    type: basic
+    name: "&aZákladný kľuč"    
+    pick-difficulty: 3
+    customModelData: 2810101
+  advanced:
+    material: STICK
+    type: advanced
+    name: "&6Prokčilý kľuč"    
+    pick-difficulty: 6
+    customModelData: 2810102
+  pro:
+    material: STICK
+    type: pro
+    name: "&cPro kľuč"    
+    pick-difficulty: 8
+    customModelData: 2810103
+  
+locking:
+  chests:
+    - CHEST
+    - TRAPPED_CHEST
+  doors:
+    - OAK_DOOR
+    - BIRCH_DOOR
+    - CRIMSON_DOOR
+    - DARK_OAK_DOOR
+    - JUNGLE_DOOR
+    - SPRUCE_DOOR
+    - WARPED_DOOR
+    - IRON_DOOR
+  trapdoors:
+    - OAK_TRAPDOOR
+    - ACACIA_TRAPDOOR
+    - BIRCH_TRAPDOOR
+    - CRIMSON_TRAPDOOR
+    - DARK_OAK_TRAPDOOR
+    - JUNGLE_TRAPDOOR
+    - SPRUCE_TRAPDOOR
+    - WARPED_TRAPDOOR
+    - IRON_TRAPDOOR
