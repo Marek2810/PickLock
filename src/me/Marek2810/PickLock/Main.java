@@ -19,6 +19,7 @@ public class Main extends JavaPlugin implements Listener {
     public static DataManager data;
     public static DataManager playerData;
     public static Lock lock;
+    public static Lockpick lockpick;
 	public static LockCMD lockCMD;
     
     public static Set<String> yamlKeys;    
@@ -35,11 +36,13 @@ public class Main extends JavaPlugin implements Listener {
     	data = new DataManager(this, "locks.yml");
     	playerData = new DataManager(this, "data.yml");
     	lock = new Lock();
+    	lockpick = new Lockpick();
 		lockCMD = new LockCMD();
     	this.getCommand("picklock").setExecutor(new Picklock());
     	this.getCommand("kluc").setExecutor(new Key());
 		this.getCommand("zamok").setExecutor(new LockCMD());
-    	this.getServer().getPluginManager().registerEvents(lock, this); 
+    	this.getServer().getPluginManager().registerEvents(lock, this);
+    	this.getServer().getPluginManager().registerEvents(lockpick, this); 
     	this.saveDefaultConfig();
     	chests = this.getConfig().getStringList("locking.chests");
     	doors = this.getConfig().getStringList("locking.doors");

@@ -1,25 +1,25 @@
 messages:
-  reload: "&aPlugin &6PickLock &abol úspešne znovu načitaný!"
-  unknown-cmd: "&cNeznámy príkaz."
-  error: "&cNiečo je špatne..."
-  ussage: "&cPoužitie: &7"
-  unknown-key: "&cNeznámy typ kľúča."
-  console-cannot-do-that: "&cToto nemôžeš ako konzola."
-  get-key: "&aPráve si získal &6kľúč&a."
-  get-hook: "&aPráve si získal &6šperhák&a."
-  on-unlock: "&aOdmokol si."
-  on-lock: "&aZamkol si."
-  wrong-key: "&cKľúč nepasuje do zámku."
-  key-is-used: "&cKľúč už bol použiťý."
-  on-first-lock: "&aÚspešne si nasadil zámok!"
-  is-locked: "&cJe zamknuté."
+  reload: "&aPlugin &6PickLock &abyl úspěšně reloadnut."
+  unknown-cmd: "&cNeznámý příkaz."
+  error: "&cNiečo je špatně..."
+  ussage: "&cPoužití: &7"
+  unknown-key: "&cNeznámý typ klíče."
+  console-cannot-do-that: "&cKonzole tohle nezvládne."
+  get-key: "&aPrávě si získal &6klíč&a."
+  get-hook: "&aPrávě si získal &6šperhák&a."
+  on-unlock: "&aOdemknul jsi."
+  on-lock: "&aZamknul jsi."
+  wrong-key: "&cKlíč nepasuje do klíčové dírky."
+  key-is-used: "&cKlíč byl už použitý."
+  on-first-lock: "&aÚspešně jsi zamčel."
+  is-locked: "&cJe zamčeno."
   no-lock: "&eBlok nemá zámok."
-  on-brake-with-lock: "&cNemôžeš rozbiť zamknutý blok."
-  to-remove-lock: "&eKlikni pravým pre odstrenenie zámku."  
-  remove-lock: "&aZámok bol úspešne odstranený."
-  remove-lock-not-owned: "&cNemôžeš odstrániť cudzí zámok"
-  to-lock-info: "&eKlikni pravým pre získanie informacií o zámku." 
-  not-locked-block: "&cBlok na ktorý si klikol nie je zamknutý."
+  on-brake-with-lock: "&cNemůžeš zničit zamčenou truhlu/dveře."
+  to-remove-lock: "&eKlini pravým tlačítkem na odstranění zámku."  
+  remove-lock: "&aZámek byl úspěšně odstraněný."
+  remove-lock-not-owned: "&cNemůžeš odstranit zámek, který ti nepatří"
+  to-lock-info: "&eKlikni pravým tlačítkem na zámek pro více informací."
+  not-locked-block: "&cTruhla/dveře na které jsi kliknul nejsou zamknuté."
   
 keys:
   basic:
@@ -40,6 +40,13 @@ keys:
     name: "&cPro kľuč"    
     pick-difficulty: 8
     customModelData: 2810103
+
+hooks:
+  basic:
+    material: STICK
+    type: basic
+    name: "&9Šperhák"
+    customModelData: 2810201
   
 locking:
   chests:

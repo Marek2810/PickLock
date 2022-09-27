@@ -1,6 +1,8 @@
 package me.Marek2810.PickLock;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -23,6 +25,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import net.md_5.bungee.api.ChatColor;
 
 public class Lock implements Listener {		
+	
+	public HashMap<Player, Block> lockpicking = new HashMap<Player, Block>();
 
 	 @EventHandler
 	    public void onClick(PlayerInteractEvent event) {	     	
@@ -196,14 +200,22 @@ public class Lock implements Listener {
 			    						lockLocations.add( getSecondDoorHlaf( secDoorBlock ) );
 			    					}			    					
 			    				}
-			    				makeLock(event, lockLocations);	                                                                       
+			    				makeLock(event, lockLocations, getLockPath( getLockPickDiff(itemInMainHand) ));	                                                                       
 		                        String msg = Main.inst.getConfig().getString("messages.on-first-lock");
 		                        player.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
 		                        event.setCancelled(true);
 		                        return;
 		    				}
 	        			}
-	        		}	        		
+	        		}	
+	        		else if (isHook(itemInMainHand)) {
+	        			if (isLocked(event.getClickedBlock().getLocation())) {
+		        			event.setCancelled(true);
+		        			lockpicking.put(player, event.getClickedBlock());
+		        			Main.lockpick.openLockpickInv(player, getLockID(event.getClickedBlock().getLocation()));
+		        			return;
+	        			}
+	        		}
 	        		//Not key
 	        		else {
 	        			if ( isLocked(event.getClickedBlock().getLocation()) ) {
@@ -349,7 +361,7 @@ public class Lock implements Listener {
 	 		return keyID;
 	 	}
 	 
-	    public void makeLock(PlayerInteractEvent event, List<Location> locations) {
+	    public void makeLock(PlayerInteractEvent event, List<Location> locations, List<Integer> lockPickPath) {
 	    	int lockID;			
 			if (  Main.yamlKeys != null ) {
 				lockID = Main.yamlKeys.size()+1;
@@ -383,6 +395,8 @@ public class Lock implements Listener {
 	        Main.data.getConfig().set("locks." + lockID + ".keyID", keyID);
 	        //locked
 	        Main.data.getConfig().set("locks." + lockID + ".locked", true);
+	        //lockpath
+	        Main.data.getConfig().set("locks." + lockID + ".lockPath", lockPickPath);
 			Main.data.saveConfig();		
 			Main.yamlKeys = Main.data.getConfig().getConfigurationSection("locks").getKeys(false);
         	Main.yamlIsLocked.put(sLockID, true);
@@ -490,6 +504,44 @@ public class Lock implements Listener {
 	        for (String keys : Main.inst.getConfig().getConfigurationSection("keys").getKeys(false)) {
 	        	if (Main.inst.getConfig().getInt("keys." + keys + ".customModelData") == keyCusModDat) {
 	        		return Main.inst.getConfig().getString("keys." + keys + ".type");        		
+	        	}
+	        }        
+	        return null;
+	    }
+	    
+	    public Boolean isHook(ItemStack item) {
+	    	String mat = item.getType().toString();    
+	    	ItemMeta meta = item.getItemMeta();
+	    	if (mat == "AIR") return false;
+	    	if (! (meta.hasCustomModelData()) ) return false;
+	        Integer hookCusModDat = meta.getCustomModelData();
+	        for (String hooks : Main.inst.getConfig().getConfigurationSection("hooks").getKeys(false)) {
+	        	//if (Main.inst.getConfig().get("keys." + hooks + ".material") != mat) return false;
+	        	if (Main.inst.getConfig().getInt("hooks." + hooks + ".customModelData") == hookCusModDat) {
+	        		return true;        		
+	        	}
+	        }        
+	        return false;
+	    } 
+	    
+	    public List<Integer> getLockPath(Integer difficulty) {
+	        List<Integer> lockPath = new ArrayList<Integer>();        
+	        while (lockPath.size() < difficulty) {
+	            int a = ThreadLocalRandom.current().nextInt(10, 9+difficulty+1);
+	            if (!lockPath.contains(a)) {
+	                lockPath.add(a);
+	            }
+	        }
+	        Collections.shuffle(lockPath);
+	        return lockPath;
+	    }
+	    
+	    public Integer getLockPickDiff(ItemStack item) {        
+	        ItemMeta meta = item.getItemMeta();
+	        Integer keyCusModDat = meta.getCustomModelData();
+	        for (String keys : Main.inst.getConfig().getConfigurationSection("keys").getKeys(false)) {
+	        	if (Main.inst.getConfig().getInt("keys." + keys + ".customModelData") == keyCusModDat) {
+	        		return Main.inst.getConfig().getInt("keys." + keys + ".pick-difficulty");        		
 	        	}
 	        }        
 	        return null;
