@@ -20,7 +20,7 @@ public class LockCMD implements CommandExecutor {
 		if (args.length == 0) {
 			// /zamok
 			String msg = Main.inst.getConfig().getString("messages.ussage");
-			sender.sendMessage(ChatColor.translateAlternateColorCodes('&', msg + "/zamok <odstranit/zrusit>"));    			
+			sender.sendMessage(ChatColor.translateAlternateColorCodes('&', msg + "/zamok <odstran/odstranit/zrusit>"));    			
 			return true;
 		}
 		else if (args.length > 0 ) {
@@ -30,7 +30,7 @@ public class LockCMD implements CommandExecutor {
 				return true;
 			}
 			// /zamok odstranit/zrusit
-			else if ( args[0].equalsIgnoreCase("odstranit")|| args[0].equalsIgnoreCase("zrusit") ) {
+			else if ( args[0].equalsIgnoreCase("odstranit")|| args[0].equalsIgnoreCase("odstran") || args[0].equalsIgnoreCase("zrusit") ) {
 				Player player = (Player) sender;
 				removingLock.add(player);
 				String msg = Main.inst.getConfig().getString("messages.to-remove-lock");

@@ -109,7 +109,7 @@ public class Lock implements Listener {
 	        	else if ( Main.chests.contains(typeOfClickeBlock.toString())
 	        			|| Main.doors.contains(typeOfClickeBlock.toString())
 	        			|| Main.trapdoors.contains(typeOfClickeBlock.toString()) ) {
-	        		ItemStack itemInMainHand = new ItemStack(event.getPlayer().getInventory().getItemInMainHand());
+	        		ItemStack itemInMainHand = new ItemStack(player.getInventory().getItemInMainHand());
 	        		//Clicking with key
 	        		if (isKey(itemInMainHand)) {	        			
 	        			//Have lock
@@ -462,8 +462,7 @@ public class Lock implements Listener {
 	    	if (! (meta.hasCustomModelData()) ) return false;	    	
 	        Integer keyCusModDat = meta.getCustomModelData();
 	        for (String key : Main.inst.getConfig().getConfigurationSection("keys").getKeys(false)) {
-	        	//TODO kontrola či je aj meteriál správny
-	        	//if (Main.inst.getConfig().get("keys." + key + ".material").toString().equalsIgnoreCase(mat)) return false;
+	        	if ( !(Main.inst.getConfig().get("keys." + key + ".material").toString().equals(mat)) ) continue;
 	        	if (Main.inst.getConfig().getInt("keys." + key + ".customModelData") == keyCusModDat) {
 	        		return true;        		
 	        	}
@@ -486,6 +485,7 @@ public class Lock implements Listener {
 
 	    public String getKeyType(ItemStack item) {       
 	        ItemMeta meta = item.getItemMeta();
+	        if (!isKey(item)) return null;
 	        Integer keyCusModDat = meta.getCustomModelData();
 	        for (String keys : Main.inst.getConfig().getConfigurationSection("keys").getKeys(false)) {
 	        	if (Main.inst.getConfig().getInt("keys." + keys + ".customModelData") == keyCusModDat) {

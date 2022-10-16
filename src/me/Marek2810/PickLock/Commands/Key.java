@@ -1,5 +1,8 @@
 package me.Marek2810.PickLock.Commands;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -22,26 +25,67 @@ public class Key implements CommandExecutor {
     			sender.sendMessage(ChatColor.translateAlternateColorCodes('&', msg + "/kluc <typ>"));    			
     			return true;
     		}
-    		else if (args.length > 0) { 
-    			// /kluc <type>
+    		else if (args.length > 0) {
+    			if ( args[0].equalsIgnoreCase("ziskaj") 
+    					|| args[0].equalsIgnoreCase("ziskej") || args[0].equalsIgnoreCase("get") ) {
+    			// /kluc ziskaj/ziskej <type>
 	    			if (! (sender instanceof Player) ) {   					
 						String msg = Main.inst.getConfig().getString("messages.console-cannot-do-that");
 	    				sender.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));  	   
 	    				return true;
 					}
-	    			else if (getItem("keys.", args[0]) != null) {
-    					Player player = (Player) sender;
-	    				String msg = Main.inst.getConfig().getString("messages.get-key");
-	        			player.getInventory().addItem(getItem("keys.", args[0]));
-	    				sender.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));	        			
-	        			return true;
+	    			else if (args.length == 1) {
+	    				Player player = (Player) sender;
+	    				player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6Ussage: &7/kluc ziskaj <typ>"));
+	    				return true;
 	    			}
-	    			else {
-	    				String msg = Main.inst.getConfig().getString("messages.unknown-key");
-	        			sender.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
-	        			return true;
-	    			}  				
+	    			else if (args.length > 1) {
+	    				if (getItem("keys.", args[1]) != null) {
+	    					Player player = (Player) sender;
+		    				String msg = Main.inst.getConfig().getString("messages.get-key");
+		        			player.getInventory().addItem(getItem("keys.", args[1]));
+		    				sender.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));	        			
+		        			return true;
+		    			}
+		    			else {
+		    				String msg = Main.inst.getConfig().getString("messages.unknown-key");
+		        			sender.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
+		        			return true;
+		    			}
+	    			}
     			}
+    			// /kluc 
+    			else if ( args[0].equalsIgnoreCase("opracuj") || args[0].equalsIgnoreCase("process") ) {
+    				if (! (sender instanceof Player) ) {   					
+						String msg = Main.inst.getConfig().getString("messages.console-cannot-do-that");
+	    				sender.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));  	   
+	    				return true;
+					}
+	    			else if (args.length == 1) {
+	    				Player player = (Player) sender;
+	    				player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6Ussage: &7/kluc opracuj <ID>"));
+	    				return true;
+	    			}
+	    			else if (args.length > 1) {
+	    				//máme ID
+	    				//is player holding key?
+	    				Player player = (Player) sender;
+	    				if (Main.lock.isKey(player.getInventory().getItemInMainHand())) {
+	    					setKey(player, Integer.valueOf(args[1]));
+	    					return true;
+	    				}
+	    				else {
+	    					player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cMusíš drťaž kľúč v ruke"));
+	    					return true;
+	    				}
+	    			}	    			
+    			}
+    			else {
+					String msg = Main.inst.getConfig().getString("messages.unknown-cmd");
+        			sender.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
+        			return true;
+				}
+    		}
     		return false;
 	}
 	
@@ -58,5 +102,35 @@ public class Key implements CommandExecutor {
         item.setItemMeta(meta);
         return item;
     }
+	
+	public void setKey (Player player, int keyID) {
+		ItemStack itemInMainHand = new ItemStack(player.getInventory().getItemInMainHand());
+		if ( !(Main.lock.isKey(itemInMainHand)) ) return;
+		ItemMeta meta = itemInMainHand.getItemMeta();
+		if ( meta.hasLore() ) {
+			List<String> lore = meta.getLore();
+			itemInMainHand.setAmount(1);
+			player.getInventory().removeItem(itemInMainHand);
+			lore.set(1, ChatColor.translateAlternateColorCodes('&', "&bID: " + keyID));
+			meta.setLore(lore);
+			meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+			meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+			itemInMainHand.setItemMeta(meta);
+			player.getInventory().addItem(itemInMainHand);
+			return;
+		}
+		else {
+	    	List<String> lore = new ArrayList<String>();
+			player.getInventory().removeItem(itemInMainHand);
+	    	lore.add("  ");
+			lore.add(ChatColor.translateAlternateColorCodes('&', "&bID: " + keyID));
+			meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+			meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+			meta.setLore(lore);
+			itemInMainHand.setItemMeta(meta);
+			player.getInventory().addItem(itemInMainHand);
+	 		return;
+		}
+	}
 }
 	
