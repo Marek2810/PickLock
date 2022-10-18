@@ -62,7 +62,6 @@ public class LockCMD implements CommandExecutor {
 							return true;
 						}
 						removingLock.put(player, true);
-						player.sendMessage(removingLock.get(player).toString());
 						String msg = Main.inst.getConfig().getString("messages.to-remove-lock");
 		    			sender.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
 						return true;
@@ -88,7 +87,6 @@ public class LockCMD implements CommandExecutor {
 							return true;
 						}
 						infoLock.put(player, true);
-						player.sendMessage(infoLock.get(player).toString());
 						String msg = Main.inst.getConfig().getString("messages.to-lock-info");
 		    			sender.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
 						return true;

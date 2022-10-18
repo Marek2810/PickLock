@@ -342,6 +342,7 @@ public class Lock implements Listener {
 			lore.add(ChatColor.translateAlternateColorCodes('&', "&bID: " + keyID));
 			meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 			meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+			item.setAmount(1);
 			player.getInventory().removeItem(item);
 			meta.setLore(lore);
 			item.setItemMeta(meta);
