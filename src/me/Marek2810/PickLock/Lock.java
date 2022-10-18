@@ -31,7 +31,7 @@ public class Lock implements Listener {
 	        	Player player = (Player) event.getPlayer();
 	        	Material typeOfClickeBlock = event.getClickedBlock().getType();	              	
 	        	//If player execute command /zamok info
-	        	if (Main.lockCMD.infoLock.contains(player)) {
+	        	if ( Main.lockCMD.infoLock.containsKey(player) && Main.lockCMD.infoLock.get(player) == true  ) {
 	        		if ( Main.chests.contains(typeOfClickeBlock.toString())
 							|| Main.doors.contains(typeOfClickeBlock.toString())
 							|| Main.trapdoors.contains(typeOfClickeBlock.toString()) ) {
@@ -61,7 +61,7 @@ public class Lock implements Listener {
 	        		}			        		
 	        	}	
 	        	//If player execute command /zamok zrusit/odstranit
-	        	else if ( Main.lockCMD.removingLock.contains(player) ) {
+	        	else if ( Main.lockCMD.removingLock.containsKey(player) && Main.lockCMD.removingLock.get(player) == true ) {
 					if ( Main.chests.contains(typeOfClickeBlock.toString())
 							|| Main.doors.contains(typeOfClickeBlock.toString())
 							|| Main.trapdoors.contains(typeOfClickeBlock.toString()) ) {
@@ -90,7 +90,7 @@ public class Lock implements Listener {
 							}
 						}
 						else {
-							String msg = Main.inst.getConfig().getString("messages.not-locked-block");
+							String msg = Main.inst.getConfig().getString("messages.no-lock");
 							player.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
 							Main.lockCMD.removingLock.remove(player);
 							event.setCancelled(true);
@@ -98,7 +98,7 @@ public class Lock implements Listener {
 						}
 					}
 					else {
-						String msg = Main.inst.getConfig().getString("messages.not-locked-block");
+						String msg = Main.inst.getConfig().getString("messages.no-lock");
 						player.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
 						Main.lockCMD.removingLock.remove(player);
 						event.setCancelled(true);

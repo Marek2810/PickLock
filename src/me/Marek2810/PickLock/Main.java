@@ -38,8 +38,8 @@ public class Main extends JavaPlugin implements Listener {
     	lock = new Lock();
 		lockCMD = new LockCMD();
     	this.getCommand("picklock").setExecutor(new Picklock());
-    	this.getCommand("kluc").setExecutor(new Key());
-		this.getCommand("zamok").setExecutor(new LockCMD());
+    	this.getCommand("key").setExecutor(new Key());
+		this.getCommand("lock").setExecutor(new LockCMD());
     	this.getServer().getPluginManager().registerEvents(lock, this); 
     	this.saveDefaultConfig();
     	chests = this.getConfig().getStringList("locking.chests");

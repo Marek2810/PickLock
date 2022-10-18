@@ -26,33 +26,48 @@ public class Key implements CommandExecutor {
     			return true;
     		}
     		else if (args.length > 0) {
-    			if ( args[0].equalsIgnoreCase("ziskaj") 
-    					|| args[0].equalsIgnoreCase("ziskej") || args[0].equalsIgnoreCase("get") ) {
     			// /kluc ziskaj/ziskej <type>
+    			if (args[0].equalsIgnoreCase("get") ||
+    					args[0].equalsIgnoreCase("ziskaj") || args[0].equalsIgnoreCase("ziskej")  ) {    				
 	    			if (! (sender instanceof Player) ) {   					
 						String msg = Main.inst.getConfig().getString("messages.console-cannot-do-that");
 	    				sender.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));  	   
 	    				return true;
 					}
-	    			else if (args.length == 1) {
+	    			else {
 	    				Player player = (Player) sender;
-	    				player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6Ussage: &7/kluc ziskaj <typ>"));
-	    				return true;
-	    			}
-	    			else if (args.length > 1) {
-	    				if (getItem("keys.", args[1]) != null) {
-	    					Player player = (Player) sender;
-		    				String msg = Main.inst.getConfig().getString("messages.get-key");
-		        			player.getInventory().addItem(getItem("keys.", args[1]));
-		    				sender.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));	        			
-		        			return true;
-		    			}
-		    			else {
-		    				String msg = Main.inst.getConfig().getString("messages.unknown-key");
-		        			sender.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
-		        			return true;
-		    			}
-	    			}
+	    				if (args.length == 1) {
+	    					if (player.hasPermission("picklock.key")) {
+				    			player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6Ussage: &7/kluc ziskaj <typ>"));
+				    			return true;
+	    					}
+	    					else {
+	    						//no permissions
+	    						player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cYou do not have permission!"));
+	    						return true;
+	    					}
+			    		}
+			    		else if (args.length > 1) {
+			    			if (player.hasPermission("picklock.key.get")) {
+				    			if (getItem("keys.", args[1]) != null) {
+				    				String msg = Main.inst.getConfig().getString("messages.get-key");
+					        		player.getInventory().addItem(getItem("keys.", args[1]));
+					    			sender.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));	        			
+					        		return true;
+					    		}
+					    		else {
+					    			String msg = Main.inst.getConfig().getString("messages.unknown-key");
+					        		sender.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
+					        		return true;
+					    		}
+			    			}
+			    			else {
+			    				//no permissions
+	    						player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cYou do not have permission!"));
+	    						return true;
+			    			}
+			    		}
+  	    			}	    				 			
     			}
     			// /kluc 
     			else if ( args[0].equalsIgnoreCase("opracuj") || args[0].equalsIgnoreCase("process") ) {
@@ -61,25 +76,39 @@ public class Key implements CommandExecutor {
 	    				sender.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));  	   
 	    				return true;
 					}
-	    			else if (args.length == 1) {
-	    				Player player = (Player) sender;
-	    				player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6Ussage: &7/kluc opracuj <ID>"));
-	    				return true;
-	    			}
-	    			else if (args.length > 1) {
-	    				//máme ID
-	    				//is player holding key?
-	    				Player player = (Player) sender;
-	    				if (Main.lock.isKey(player.getInventory().getItemInMainHand())) {
-	    					setKey(player, Integer.valueOf(args[1]));
-	    					return true;
-	    				}
-	    				else {
-	    					player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cMusíš drťaž kľúč v ruke"));
-	    					return true;
-	    				}
-	    			}	    			
-    			}
+	    			if (args.length == 1) {
+		    			Player player = (Player) sender;
+		    			if (player.hasPermission("picklock.key.process")) {
+		    				player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6Ussage: &7/kluc opracuj <ID>"));
+			    			return true;
+		    			}
+		    			else {
+		    				//no permissions
+    						player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cYou do not have permission!"));
+    						return true;
+		    			}
+		    		}
+		    		else if (args.length > 1) {
+		    			//máme ID
+		    			//is player holding key?
+		    			Player player = (Player) sender;
+		    			if (player.hasPermission("picklock.key.process")) {
+		    				if (Main.lock.isKey(player.getInventory().getItemInMainHand())) {
+			    				setKey(player, Integer.valueOf(args[1]));
+			    				return true;
+			    			}
+			    			else {
+			    				player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cMusíš drťaž kľúč v ruke"));
+			    				return true;
+			    			}
+		    			}
+		    			else {
+		    				//no permissions
+    						player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cYou do not have permission!"));
+    						return true;
+		    			}
+		    		}	    			
+	    		}    		
     			else {
 					String msg = Main.inst.getConfig().getString("messages.unknown-cmd");
         			sender.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));

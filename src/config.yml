@@ -13,13 +13,12 @@ messages:
   key-is-used: "&cKlíč byl již použit."
   on-first-lock: "&aÚspešně jsi zamknul."
   is-locked: "&cJe zamčeno."
-  no-lock: "&eBlok nemá zámok."
+  no-lock: "&cTruhla/dveře na které jsi kliknul nejsou zamknuté."
   on-brake-with-lock: "&cNemůžeš zničit zamčenou truhlu/dveře."
   to-remove-lock: "&eKlini pravým tlačítkem na odstranění zámku."  
   remove-lock: "&aZámek byl úspěšně odstraněný."
   remove-lock-not-owned: "&cNemůžeš odstranit zámek, který ti nepatří"
   to-lock-info: "&eKlikni pravým tlačítkem na zámek pro více informací."
-  not-locked-block: "&cTruhla/dveře na které jsi kliknul nejsou zamknuté."
   
 keys:
   basic:
