@@ -2,8 +2,10 @@ package me.Marek2810.PickLock;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -38,11 +40,12 @@ public class Lock implements Listener {
 	        			if ( hasLock(event.getClickedBlock().getLocation()) ) {
 	        				String lockID = getLockID( event.getClickedBlock().getLocation() );
 	        				ConfigurationSection lock = Main.data.getConfig().getConfigurationSection("locks." + lockID);
-	        				//TODO owner UUDI to player name
 	        				player.sendMessage(ChatColor.translateAlternateColorCodes('&', 
 	        						"&7------------ \n"
 	        						+ "&aLockID: &e" + lockID + "\n"
-	        						+ "&aOwner: &e" + lock.getString("owner") + "\n" 
+	        						+ "&aOwner: &e" + lock.getString("owner") +
+	        							" (" + Bukkit.getServer().getOfflinePlayer(UUID.fromString(lock.getString("owner"))).getName()
+	        							+ ")\n" 
 	        						+ "&aKey type: &e" + lock.getString("keyType") + "\n" 
 	        						+ "&aKey ID: &e" + lock.getInt("keyID") + "\n"
 	        						+ "&aLocked: &e" + lock.getBoolean("locked") + "\n"
