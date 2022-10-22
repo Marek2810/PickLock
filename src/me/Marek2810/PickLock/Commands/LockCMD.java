@@ -35,7 +35,8 @@ public class LockCMD implements CommandExecutor {
 				}	
 				else {
 					//no permissions
-					player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cYou do not have permission!"));
+					String msg = Main.inst.getConfig().getString("messages.no-permission");
+    				sender.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
 					return true;
 				}
 			}
@@ -58,7 +59,8 @@ public class LockCMD implements CommandExecutor {
 					Player player = (Player) sender;					
 					if (player.hasPermission("picklock.lock.remove")) {
 						if ( removingLock.containsKey(player) || infoLock.containsKey(player) ) {
-							player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6Dokonči akciu z predchadzajúceho príkazu."));
+							String msg = Main.inst.getConfig().getString("messages.finish-previos-action");
+							player.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
 							return true;
 						}
 						removingLock.put(player, true);
@@ -68,8 +70,9 @@ public class LockCMD implements CommandExecutor {
 					}					
 					else {
 						//no permissions
-						player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cYou do not have permission!"));
-						return true;
+						String msg = Main.inst.getConfig().getString("messages.no-permission");
+        				sender.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
+    					return true;
 					}
 				}										
 			}	
@@ -83,7 +86,8 @@ public class LockCMD implements CommandExecutor {
 					Player player = (Player) sender;
 					if (player.hasPermission("picklock.lock.info")) {
 						if ( removingLock.containsKey(player) || infoLock.containsKey(player) ) {
-							player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6Dokonči akciu z predchadzajúceho príkazu."));
+							String msg = Main.inst.getConfig().getString("messages.finish-previos-action");
+							player.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
 							return true;
 						}
 						infoLock.put(player, true);
@@ -93,8 +97,9 @@ public class LockCMD implements CommandExecutor {
 					}	
 					else {
 						//no permissions
-						player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cYou do not have permission!"));
-						return true;
+						String msg = Main.inst.getConfig().getString("messages.no-permission");
+        				sender.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
+    					return true;
 					}
 				}				
 			}

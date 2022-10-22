@@ -22,7 +22,8 @@ public class Picklock implements CommandExecutor {
         			} 
     				else {
     					//no permissions
-    					sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cYou do not have permission!"));
+    					String msg = Main.inst.getConfig().getString("messages.no-permission");
+        				sender.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
     					return true;
         			}        			
     			}

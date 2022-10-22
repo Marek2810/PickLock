@@ -2,8 +2,10 @@ messages:
   reload: "&aPlugin &6PickLock &abyl úspěšně reloadnut."
   unknown-cmd: "&cNeznámý příkaz."
   error: "&cNiečo je špatně..."
-  ussage: "&cPoužití: &7"
+  ussage: "&6Použití: &7"
   unknown-key: "&cNeznámý typ klíče."
+  no-permission: "&cNa toto nemáš oprávnenie."
+  finish-previos-action: "&6Dokonči akciu z predchadzajúceho príkazu." 
   console-cannot-do-that: "&cKonzole tohle nezvládne."
   get-key: "&aPrávě si získal &6klíč&a."
   get-hook: "&aPrávě si získal &6šperhák&a."
@@ -19,6 +21,7 @@ messages:
   remove-lock: "&aZámek byl úspěšně odstraněný."
   remove-lock-not-owned: "&cNemůžeš odstranit zámek, který ti nepatří"
   to-lock-info: "&eKlikni pravým tlačítkem na zámek pro více informací."
+  need-to-hold-key: "&cMusíš v ruke držať kľúč."
   
 keys:
   basic:
