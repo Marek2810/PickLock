@@ -24,7 +24,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import net.md_5.bungee.api.ChatColor;
 
-public class Lock implements Listener {		
+public class Lock implements Listener {
 
 	 @EventHandler
 	    public void onClick(PlayerInteractEvent event) {	     	
@@ -74,6 +74,7 @@ public class Lock implements Listener {
 							if (UUID.equals(player.getUniqueId().toString())) {							
 								Main.yamlIsLocked.remove(lockID);
 								Main.yamlKeyID.remove(lockID);
+								Main.yamlKeyType.remove(lockID);
 								Main.yamlKeys.remove(lockID);
 								Main.yamlLocations.remove(lockID);
 								Main.data.getConfig().set("locks." + lockID, null);
@@ -118,7 +119,8 @@ public class Lock implements Listener {
 							String lockID = getLockID( event.getClickedBlock().getLocation() );
 							Main.yamlIsLocked.remove(lockID);
 							Main.yamlKeyID.remove(lockID);
-							Main.yamlKeys.remove(lockID);
+							Main.yamlKeyType.remove(lockID);
+							Main.yamlKeys.remove(lockID);							
 							Main.yamlLocations.remove(lockID);
 							Main.data.getConfig().set("locks." + lockID, null);
 							Main.data.saveConfig();							
@@ -160,7 +162,7 @@ public class Lock implements Listener {
 	                    		String msg = Main.inst.getConfig().getString("messages.on-lock");
 	                    		player.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
 	                    		Main.lockCMD.adminLock.remove(player);
-	                    		event.setCancelled(true);                    		
+	                    		event.setCancelled(true);                 		
 	                    		return;
 	                    	}
 	                    	else {
@@ -244,7 +246,7 @@ public class Lock implements Listener {
 	                            	return;
 	                            }	                   
 	                            //Check if key is correct
-	                            if ( isGoodKey(lockID, keyID) ) {
+	                            if ( isGoodKey(lockID, keyID, getKeyType(itemInMainHand)) ) {
 	                            	//Is locked?
 	                            	if ( isLocked(event.getClickedBlock().getLocation()) ) {	                            		
 	                            		//unlock
@@ -381,9 +383,10 @@ public class Lock implements Listener {
 		 return true;
 	 }
 	 
-	 public boolean isGoodKey(String lockID, int keyID) {
+	 public boolean isGoodKey(String lockID, int keyID, String keyType) {
 		 int yamlKeyID = Main.yamlKeyID.get(lockID);
-		 if (yamlKeyID == keyID) return true;		 
+		 String yamlKeyType = Main.yamlKeyType.get(lockID);
+		 if ( yamlKeyID == keyID && yamlKeyType.equalsIgnoreCase(keyType) ) return true;		 
 		 return false;
 	 }
 	 
@@ -502,7 +505,8 @@ public class Lock implements Listener {
 			Main.data.saveConfig();		
 			Main.yamlKeys = Main.data.getConfig().getConfigurationSection("locks").getKeys(false);
         	Main.yamlIsLocked.put(sLockID, true);
-        	Main.yamlKeyID.put(sLockID, keyID);        		
+        	Main.yamlKeyID.put(sLockID, keyID);   
+        	Main.yamlKeyType.put(sLockID, getKeyType( event.getPlayer().getInventory().getItemInMainHand() ));
 	    	return;
 	    }
 	    

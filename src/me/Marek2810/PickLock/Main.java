@@ -28,6 +28,7 @@ public class Main extends JavaPlugin implements Listener {
     public static List<String> trapdoors;
     public static HashMap<String, Boolean> yamlIsLocked = new HashMap<String, Boolean>();
     public static HashMap<String, Integer> yamlKeyID = new HashMap<String, Integer>();
+    public static HashMap<String, String> yamlKeyType = new HashMap<String, String>();
     public static HashMap<String, List<Object>> yamlLocations = new HashMap<String, List<Object>>();  
     
     @Override
@@ -51,6 +52,7 @@ public class Main extends JavaPlugin implements Listener {
         		for (String lockID : yamlKeys) {
 	        		yamlIsLocked.put(lockID, data.getConfig().getBoolean("locks." + lockID + ".locked") );
 	        		yamlKeyID.put(lockID, data.getConfig().getInt("locks." + lockID + ".keyID"));
+	        		yamlKeyType.put(lockID, data.getConfig().getString("locks." + lockID + ".keyType"));
 	        		List<Object> locs = new ArrayList<Object>();
 	        		for (int i = 1; i <= 4; i++ ) {
 	        			Object get = data.getConfig().get("locks." + lockID + ".location" + i);	        			
