@@ -43,9 +43,9 @@ public class Lock implements Listener {
 	        				player.sendMessage(ChatColor.translateAlternateColorCodes('&', 
 	        						"&7------------ \n"
 	        						+ "&aLockID: &e" + lockID + "\n"
-	        						+ "&aOwner: &e" + lock.getString("owner") +
-	        							" (" + Bukkit.getServer().getOfflinePlayer(UUID.fromString(lock.getString("owner"))).getName()
-	        							+ ")\n" 
+	        						+ "&aOwner: &e" + 
+	        							Bukkit.getServer().getOfflinePlayer(UUID.fromString(lock.getString("owner"))).getName()
+	        							+ "\n" 
 	        						+ "&aKey type: &e" + lock.getString("keyType") + "\n" 
 	        						+ "&aKey ID: &e" + lock.getInt("keyID") + "\n"
 	        						+ "&aLocked: &e" + lock.getBoolean("locked") + "\n"
@@ -108,6 +108,118 @@ public class Lock implements Listener {
 						return;
 					}
 				}
+	        	// /lock admin remove
+	        	else if ( Main.lockCMD.adminRemovingLock.containsKey(player) 
+	        			&& Main.lockCMD.adminRemovingLock.get(player) == true ) {
+					if ( Main.chests.contains(typeOfClickeBlock.toString())
+							|| Main.doors.contains(typeOfClickeBlock.toString())
+							|| Main.trapdoors.contains(typeOfClickeBlock.toString()) ) {
+						if ( hasLock(event.getClickedBlock().getLocation()) ) {							
+							String lockID = getLockID( event.getClickedBlock().getLocation() );
+							Main.yamlIsLocked.remove(lockID);
+							Main.yamlKeyID.remove(lockID);
+							Main.yamlKeys.remove(lockID);
+							Main.yamlLocations.remove(lockID);
+							Main.data.getConfig().set("locks." + lockID, null);
+							Main.data.saveConfig();							
+							String msg = Main.inst.getConfig().getString("messages.remove-lock");
+							player.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));							
+							event.setCancelled(true);	
+							Main.lockCMD.adminRemovingLock.remove(player);
+							return;							
+						}
+						else {
+							String msg = Main.inst.getConfig().getString("messages.no-lock");
+							player.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
+							Main.lockCMD.adminRemovingLock.remove(player);
+							event.setCancelled(true);
+							return;
+						}
+					}
+					else {
+						String msg = Main.inst.getConfig().getString("messages.no-lock");
+						player.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
+						Main.lockCMD.adminRemovingLock.remove(player);
+						event.setCancelled(true);
+						return;
+					}
+				}
+	        	// /lock admin lock
+	        	else if ( Main.lockCMD.adminLock.containsKey(player) 
+	        			&& Main.lockCMD.adminLock.get(player) == true ) {
+	        		if ( Main.chests.contains(typeOfClickeBlock.toString())
+							|| Main.doors.contains(typeOfClickeBlock.toString())
+							|| Main.trapdoors.contains(typeOfClickeBlock.toString()) ) {
+	        			if ( hasLock(event.getClickedBlock().getLocation()) ) {
+	        				if ( !(isLocked(event.getClickedBlock().getLocation())) ) {	                            		
+	                    		//unlock
+								String lockID = getLockID( event.getClickedBlock().getLocation() );
+		        				Main.yamlIsLocked.replace(lockID, true);
+	                    		Main.data.getConfig().set("locks." + lockID + ".locked", true);
+	                    		Main.data.saveConfig();
+	                    		String msg = Main.inst.getConfig().getString("messages.on-lock");
+	                    		player.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
+	                    		Main.lockCMD.adminLock.remove(player);
+	                    		event.setCancelled(true);                    		
+	                    		return;
+	                    	}
+	                    	else {
+	                    		//locked
+	                    		String msg = Main.inst.getConfig().getString("messages.is-not-locked");
+								player.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
+								Main.lockCMD.adminLock.remove(player);
+								event.setCancelled(true);
+								return;
+	                    	}
+	        			}
+	        			else {
+	        				//not locked
+	        				String msg = Main.inst.getConfig().getString("messages.no-lock");
+							player.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
+							Main.lockCMD.adminLock.remove(player);
+							event.setCancelled(true);
+							return;
+	        			}	        				        			
+	        		}
+	        	}
+	        	// /lock admin unlock
+	        	else if ( Main.lockCMD.adminUnlock.containsKey(player) 
+	        			&& Main.lockCMD.adminUnlock.get(player) == true ) {
+	        		if ( Main.chests.contains(typeOfClickeBlock.toString())
+							|| Main.doors.contains(typeOfClickeBlock.toString())
+							|| Main.trapdoors.contains(typeOfClickeBlock.toString()) ) {
+	        			if (hasLock(event.getClickedBlock().getLocation())) {
+	        				if ( isLocked(event.getClickedBlock().getLocation()) ) {	                            		
+	                    		//unlock
+								String lockID = getLockID( event.getClickedBlock().getLocation() );
+	                    		Main.yamlIsLocked.replace(lockID, false);
+	                    		Main.data.getConfig().set("locks." + lockID + ".locked", false);
+	                    		Main.data.saveConfig();
+	                    		String msg = Main.inst.getConfig().getString("messages.on-unlock");
+	                    		player.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
+	                    		Main.lockCMD.adminUnlock.remove(player);
+	                    		event.setCancelled(true);
+	                    		return;
+	                    	}
+	                    	else {
+	                    		//unlocked     
+	                    		String msg = Main.inst.getConfig().getString("messages.is-not-locked");
+								player.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
+								Main.lockCMD.adminUnlock.remove(player);
+								event.setCancelled(true);
+								return;
+	                    	}
+	        			}
+	        			else {
+	        				//not lock
+	        				String msg = Main.inst.getConfig().getString("messages.no-lock");
+							player.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
+							Main.lockCMD.adminUnlock.remove(player);
+							event.setCancelled(true);
+							return;
+	        			}	        				        			
+	        		}	        		
+	        	}
 	        	//Is block we can lock
 	        	else if ( Main.chests.contains(typeOfClickeBlock.toString())
 	        			|| Main.doors.contains(typeOfClickeBlock.toString())

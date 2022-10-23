@@ -45,6 +45,26 @@ permissions:
   picklock.lock.remove:
     description: Permission for /key remove command.
     default: false
+  picklock.admin.lock:
+    description: Permission for /lock admin command.
+    default: false
+  picklock.admin.lock.remove:
+    description: Permission for /lock admin remove command.
+    default: false
+  picklock.admin.lock.lock:
+    description: Permission for /lock admin lock remove command.
+    default: false 
+  picklock.admin.lock.unlock:
+    description: Permission for /lock admin unlock remove command.
+    default: false 
+  picklock.admin.*:
+    description: All admin permissions for PickLock.
+    default: op
+    children:
+      picklock.admin.lock: true
+      picklock.admin.lock.remove: true
+      picklock.admin.lock.lock: true
+      picklock.admin.lock.unlock: true
   picklock.*:
     description: All permissions for PickLock.
     default: op
@@ -58,4 +78,4 @@ permissions:
       picklock.lock: true       
       picklock.lock.info: true
       picklock.lock.remove: true
-     
+      picklock.admin.*: true

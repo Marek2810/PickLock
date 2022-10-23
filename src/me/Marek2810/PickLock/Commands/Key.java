@@ -138,7 +138,7 @@ public class Key implements CommandExecutor {
     			}
     		}
     	return false;
-	}
+	}	
 	
 	public ItemStack getItem(String itemType, String type) {
     	if ( !(Main.inst.getConfig().contains(itemType + type + ".type")) ) return null;    	
