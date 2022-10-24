@@ -6,5 +6,76 @@ api-version: 1.17
 
 commands:
   picklock:
-  zamok:
-  kluc:
+    permission: picklock.picklock
+    permission-message: You do not have permission!
+  lock:
+    permission: picklock.lock
+    permission-message: You do not have permission!
+    aliases: [zamok]
+  key:
+    permission: picklock.key
+    permission-message: You do not have permission!
+    aliases: [kluc]    
+
+permissions:
+  picklock.use:
+    description: Allows to lock object.
+    default: true
+  picklock.picklock:
+    description: Permission for /picklock command.
+    default: false
+  picklock.picklock.reload:
+    description: Permission for /picklock reload command.
+    default: false
+  picklock.lock:
+    description: Permission for /lock command.
+    default: false
+  picklock.key:
+    description: Permission for /key command.
+    default: false
+  picklock.key.get:
+    description: Permission for /key get command.
+    default: false
+  picklock.key.process:
+    description: Permission for /key process get command.
+    default: false
+  picklock.lock.info:
+    description: Permission for /key info command.
+    default: false
+  picklock.lock.remove:
+    description: Permission for /key remove command.
+    default: false
+  picklock.admin.lock:
+    description: Permission for /lock admin command.
+    default: false
+  picklock.admin.lock.remove:
+    description: Permission for /lock admin remove command.
+    default: false
+  picklock.admin.lock.lock:
+    description: Permission for /lock admin lock remove command.
+    default: false 
+  picklock.admin.lock.unlock:
+    description: Permission for /lock admin unlock remove command.
+    default: false 
+  picklock.admin.*:
+    description: All admin permissions for PickLock.
+    default: op
+    children:
+      picklock.admin.lock: true
+      picklock.admin.lock.remove: true
+      picklock.admin.lock.lock: true
+      picklock.admin.lock.unlock: true
+  picklock.*:
+    description: All permissions for PickLock.
+    default: op
+    children:
+      picklock.use: true
+      picklock.picklock: true
+      picklock.picklock.reload: true
+      picklock.key: true
+      picklock.key.get: true
+      picklock.key.process: true
+      picklock.lock: true       
+      picklock.lock.info: true
+      picklock.lock.remove: true
+      picklock.admin.*: true

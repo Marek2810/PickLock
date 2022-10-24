@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -35,24 +37,30 @@ public class Lock implements Listener {
 	        	Player player = (Player) event.getPlayer();
 	        	Material typeOfClickeBlock = event.getClickedBlock().getType();	              	
 	        	//If player execute command /zamok info
-	        	if (Main.lockCMD.infoLock.contains(player)) {
+	        	Location loc = event.getClickedBlock().getLocation();
+	        	String locCheck = loc.getWorld().getName() + ", " + loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ();
+	        	if ( Main.lockCMD.infoLock.containsKey(player) && Main.lockCMD.infoLock.get(player) == true  ) {
 	        		if ( Main.chests.contains(typeOfClickeBlock.toString())
 							|| Main.doors.contains(typeOfClickeBlock.toString())
 							|| Main.trapdoors.contains(typeOfClickeBlock.toString()) ) {
 	        			if ( hasLock(event.getClickedBlock().getLocation()) ) {
 	        				String lockID = getLockID( event.getClickedBlock().getLocation() );
 	        				ConfigurationSection lock = Main.data.getConfig().getConfigurationSection("locks." + lockID);
-	        				//TODO owner UUDI to player name
 	        				player.sendMessage(ChatColor.translateAlternateColorCodes('&', 
 	        						"&7------------ \n"
 	        						+ "&aLockID: &e" + lockID + "\n"
-	        						+ "&aOwner: &e" + lock.getString("owner") + "\n" 
+	        						+ "&aOwner: &e" + 
+	        							Bukkit.getServer().getOfflinePlayer(UUID.fromString(lock.getString("owner"))).getName()
+	        							+ "\n" 
 	        						+ "&aKey type: &e" + lock.getString("keyType") + "\n" 
 	        						+ "&aKey ID: &e" + lock.getInt("keyID") + "\n"
 	        						+ "&aLocked: &e" + lock.getBoolean("locked") + "\n"
 	        						+ "&7------------"));
 	        				event.setCancelled(true);	
-							Main.lockCMD.infoLock.remove(player);
+							Main.console.sendMessage(ChatColor.translateAlternateColorCodes('&',
+									Main.logPrefix + "&aHráč &6" + player.getName() + " &azistil informácie o zámku &6ID: &e"
+									+ lockID + " &ana súradniciach &6" + locCheck + "&a."));
+	        				Main.lockCMD.infoLock.remove(player);
 							return;
 	        			}
 	        			else {
@@ -65,7 +73,7 @@ public class Lock implements Listener {
 	        		}			        		
 	        	}	
 	        	//If player execute command /zamok zrusit/odstranit
-	        	else if ( Main.lockCMD.removingLock.contains(player) ) {
+	        	else if ( Main.lockCMD.removingLock.containsKey(player) && Main.lockCMD.removingLock.get(player) == true ) {
 					if ( Main.chests.contains(typeOfClickeBlock.toString())
 							|| Main.doors.contains(typeOfClickeBlock.toString())
 							|| Main.trapdoors.contains(typeOfClickeBlock.toString()) ) {
@@ -75,6 +83,7 @@ public class Lock implements Listener {
 							if (UUID.equals(player.getUniqueId().toString())) {							
 								Main.yamlIsLocked.remove(lockID);
 								Main.yamlKeyID.remove(lockID);
+								Main.yamlKeyType.remove(lockID);
 								Main.yamlKeys.remove(lockID);
 								Main.yamlLocations.remove(lockID);
 								Main.data.getConfig().set("locks." + lockID, null);
@@ -82,7 +91,10 @@ public class Lock implements Listener {
 								String msg = Main.inst.getConfig().getString("messages.remove-lock");
 								player.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));							
 								event.setCancelled(true);	
-								Main.lockCMD.removingLock.remove(player);
+								Main.console.sendMessage(ChatColor.translateAlternateColorCodes('&',
+										Main.logPrefix + "&aHráč &6" + player.getName() + " &aodstránil zámok &6ID: &e" 
+										+ lockID + " &ana súradniciach &6" + locCheck + "&a."));
+								Main.lockCMD.removingLock.remove(player);								
 								return;
 							}
 							else {
@@ -94,7 +106,7 @@ public class Lock implements Listener {
 							}
 						}
 						else {
-							String msg = Main.inst.getConfig().getString("messages.not-locked-block");
+							String msg = Main.inst.getConfig().getString("messages.no-lock");
 							player.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
 							Main.lockCMD.removingLock.remove(player);
 							event.setCancelled(true);
@@ -102,18 +114,140 @@ public class Lock implements Listener {
 						}
 					}
 					else {
-						String msg = Main.inst.getConfig().getString("messages.not-locked-block");
+						String msg = Main.inst.getConfig().getString("messages.no-lock");
 						player.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
 						Main.lockCMD.removingLock.remove(player);
 						event.setCancelled(true);
 						return;
 					}
 				}
+	        	// /lock admin remove
+	        	else if ( Main.lockCMD.adminRemovingLock.containsKey(player) 
+	        			&& Main.lockCMD.adminRemovingLock.get(player) == true ) {
+					if ( Main.chests.contains(typeOfClickeBlock.toString())
+							|| Main.doors.contains(typeOfClickeBlock.toString())
+							|| Main.trapdoors.contains(typeOfClickeBlock.toString()) ) {
+						if ( hasLock(event.getClickedBlock().getLocation()) ) {							
+							String lockID = getLockID( event.getClickedBlock().getLocation() );
+							Main.yamlIsLocked.remove(lockID);
+							Main.yamlKeyID.remove(lockID);
+							Main.yamlKeyType.remove(lockID);
+							Main.yamlKeys.remove(lockID);							
+							Main.yamlLocations.remove(lockID);
+							Main.data.getConfig().set("locks." + lockID, null);
+							Main.data.saveConfig();							
+							String msg = Main.inst.getConfig().getString("messages.remove-lock");
+							player.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));							
+							event.setCancelled(true);	
+							Main.console.sendMessage(ChatColor.translateAlternateColorCodes('&',
+									Main.logPrefix + "&cAdmin &6" + player.getName() + " &aodstránil zámok &6ID: &e" 
+									+ lockID + " &ana súradniciach &6" + locCheck + "&a."));
+							Main.lockCMD.adminRemovingLock.remove(player);
+							return;							
+						}
+						else {
+							String msg = Main.inst.getConfig().getString("messages.no-lock");
+							player.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
+							Main.lockCMD.adminRemovingLock.remove(player);
+							event.setCancelled(true);
+							return;
+						}
+					}
+					else {
+						String msg = Main.inst.getConfig().getString("messages.no-lock");
+						player.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
+						Main.lockCMD.adminRemovingLock.remove(player);
+						event.setCancelled(true);
+						return;
+					}
+				}
+	        	// /lock admin lock
+	        	else if ( Main.lockCMD.adminLock.containsKey(player) 
+	        			&& Main.lockCMD.adminLock.get(player) == true ) {
+	        		if ( Main.chests.contains(typeOfClickeBlock.toString())
+							|| Main.doors.contains(typeOfClickeBlock.toString())
+							|| Main.trapdoors.contains(typeOfClickeBlock.toString()) ) {
+	        			if ( hasLock(event.getClickedBlock().getLocation()) ) {
+	        				if ( !(isLocked(event.getClickedBlock().getLocation())) ) {	                            		
+	                    		//unlock
+								String lockID = getLockID( event.getClickedBlock().getLocation() );
+		        				Main.yamlIsLocked.replace(lockID, true);
+	                    		Main.data.getConfig().set("locks." + lockID + ".locked", true);
+	                    		Main.data.saveConfig();
+	                    		String msg = Main.inst.getConfig().getString("messages.on-lock");
+	                    		player.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
+	                    		Main.lockCMD.adminLock.remove(player);
+	                    		Main.console.sendMessage(ChatColor.translateAlternateColorCodes('&',
+										Main.logPrefix + "&cAdmin &6" + player.getName() + " &azamkol zámok &6ID: &e" 
+										+ lockID + " &ana súradniciach &6" + locCheck + "&a."));
+	                    		event.setCancelled(true);                 		
+	                    		return;
+	                    	}
+	                    	else {
+	                    		//locked
+	                    		String msg = Main.inst.getConfig().getString("messages.is-not-locked");
+								player.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
+								Main.lockCMD.adminLock.remove(player);
+								event.setCancelled(true);
+								return;
+	                    	}
+	        			}
+	        			else {
+	        				//not locked
+	        				String msg = Main.inst.getConfig().getString("messages.no-lock");
+							player.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
+							Main.lockCMD.adminLock.remove(player);
+							event.setCancelled(true);
+							return;
+	        			}	        				        			
+	        		}
+	        	}
+	        	// /lock admin unlock
+	        	else if ( Main.lockCMD.adminUnlock.containsKey(player) 
+	        			&& Main.lockCMD.adminUnlock.get(player) == true ) {
+	        		if ( Main.chests.contains(typeOfClickeBlock.toString())
+							|| Main.doors.contains(typeOfClickeBlock.toString())
+							|| Main.trapdoors.contains(typeOfClickeBlock.toString()) ) {
+	        			if (hasLock(event.getClickedBlock().getLocation())) {
+	        				if ( isLocked(event.getClickedBlock().getLocation()) ) {	                            		
+	                    		//unlock
+								String lockID = getLockID( event.getClickedBlock().getLocation() );
+	                    		Main.yamlIsLocked.replace(lockID, false);
+	                    		Main.data.getConfig().set("locks." + lockID + ".locked", false);
+	                    		Main.data.saveConfig();
+	                    		String msg = Main.inst.getConfig().getString("messages.on-unlock");
+	                    		player.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));	                    		
+	                    		Main.console.sendMessage(ChatColor.translateAlternateColorCodes('&',
+										Main.logPrefix + "&cAdmin &6" + player.getName() + " &aodomkol zámok &6ID: &e" 
+										+ lockID + " &ana súradniciach &6" + locCheck + "&a."));
+	                    		event.setCancelled(true);
+	                    		Main.lockCMD.adminUnlock.remove(player);
+	                    		return;
+	                    	}
+	                    	else {
+	                    		//unlocked     
+	                    		String msg = Main.inst.getConfig().getString("messages.is-not-locked");
+								player.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
+								Main.lockCMD.adminUnlock.remove(player);
+								event.setCancelled(true);
+								return;
+	                    	}
+	        			}
+	        			else {
+	        				//not lock
+	        				String msg = Main.inst.getConfig().getString("messages.no-lock");
+							player.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
+							Main.lockCMD.adminUnlock.remove(player);
+							event.setCancelled(true);
+							return;
+	        			}	        				        			
+	        		}	        		
+	        	}
 	        	//Is block we can lock
 	        	else if ( Main.chests.contains(typeOfClickeBlock.toString())
 	        			|| Main.doors.contains(typeOfClickeBlock.toString())
 	        			|| Main.trapdoors.contains(typeOfClickeBlock.toString()) ) {
-	        		ItemStack itemInMainHand = new ItemStack(event.getPlayer().getInventory().getItemInMainHand());
+	        		ItemStack itemInMainHand = new ItemStack(player.getInventory().getItemInMainHand());
 	        		//Clicking with key
 	        		if (isKey(itemInMainHand)) {	        			
 	        			//Have lock
@@ -133,7 +267,7 @@ public class Lock implements Listener {
 	                            	return;
 	                            }	                   
 	                            //Check if key is correct
-	                            if ( isGoodKey(lockID, keyID) ) {
+	                            if ( isGoodKey(lockID, keyID, getKeyType(itemInMainHand)) ) {
 	                            	//Is locked?
 	                            	if ( isLocked(event.getClickedBlock().getLocation()) ) {	                            		
 	                            		//unlock
@@ -142,6 +276,9 @@ public class Lock implements Listener {
 	                            		Main.data.saveConfig();
 	                            		String msg = Main.inst.getConfig().getString("messages.on-unlock");
 	                            		player.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
+	                            		Main.console.sendMessage(ChatColor.translateAlternateColorCodes('&',
+	    									Main.logPrefix + "&aHráč &6" + player.getName() + " &aodomkol zámok &6ID: &e" 
+	    									+ lockID + " &ana súradniciach &6" + locCheck + "&a."));
 	                            		event.setCancelled(true);
 	                            		return;
 	                            	}
@@ -152,6 +289,9 @@ public class Lock implements Listener {
 	                            		Main.data.saveConfig();
 	                            		String msg = Main.inst.getConfig().getString("messages.on-lock");
 	                            		player.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
+	                            		Main.console.sendMessage(ChatColor.translateAlternateColorCodes('&',
+	                            			Main.logPrefix + "&aHráč &6" + player.getName() + " &azamkol zámok &6ID: &e" 
+	    									+ lockID + " &ana súradniciach &6" + locCheck + "&a."));
 	                            		event.setCancelled(true);
 	                            		return;
 	                            	}
@@ -203,6 +343,9 @@ public class Lock implements Listener {
 			    				makeLock(event, lockLocations, getLockPath( getLockPickDiff(itemInMainHand) ));	                                                                       
 		                        String msg = Main.inst.getConfig().getString("messages.on-first-lock");
 		                        player.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
+		                        Main.console.sendMessage(ChatColor.translateAlternateColorCodes('&',
+									Main.logPrefix + "&aHráč &6" + player.getName() + " &anasadil zámok &6ID: &e" 
+									+ getLockID(event.getClickedBlock().getLocation()) + " &ana súradniciach &6" + locCheck + "&a."));		                        
 		                        event.setCancelled(true);
 		                        return;
 		    				}
@@ -278,9 +421,10 @@ public class Lock implements Listener {
 		 return true;
 	 }
 	 
-	 public boolean isGoodKey(String lockID, int keyID) {
+	 public boolean isGoodKey(String lockID, int keyID, String keyType) {
 		 int yamlKeyID = Main.yamlKeyID.get(lockID);
-		 if (yamlKeyID == keyID) return true;		 
+		 String yamlKeyType = Main.yamlKeyType.get(lockID);
+		 if ( yamlKeyID == keyID && yamlKeyType.equalsIgnoreCase(keyType) ) return true;		 
 		 return false;
 	 }
 	 
@@ -354,6 +498,7 @@ public class Lock implements Listener {
 			lore.add(ChatColor.translateAlternateColorCodes('&', "&bID: " + keyID));
 			meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 			meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+			item.setAmount(1);
 			player.getInventory().removeItem(item);
 			meta.setLore(lore);
 			item.setItemMeta(meta);
@@ -400,7 +545,8 @@ public class Lock implements Listener {
 			Main.data.saveConfig();		
 			Main.yamlKeys = Main.data.getConfig().getConfigurationSection("locks").getKeys(false);
         	Main.yamlIsLocked.put(sLockID, true);
-        	Main.yamlKeyID.put(sLockID, keyID);        		
+        	Main.yamlKeyID.put(sLockID, keyID);   
+        	Main.yamlKeyType.put(sLockID, getKeyType( event.getPlayer().getInventory().getItemInMainHand() ));
 	    	return;
 	    }
 	    
@@ -476,8 +622,7 @@ public class Lock implements Listener {
 	    	if (! (meta.hasCustomModelData()) ) return false;	    	
 	        Integer keyCusModDat = meta.getCustomModelData();
 	        for (String key : Main.inst.getConfig().getConfigurationSection("keys").getKeys(false)) {
-	        	//TODO kontrola či je aj meteriál správny
-	        	//if (Main.inst.getConfig().get("keys." + key + ".material").toString().equalsIgnoreCase(mat)) return false;
+	        	if ( !(Main.inst.getConfig().get("keys." + key + ".material").toString().equals(mat)) ) continue;
 	        	if (Main.inst.getConfig().getInt("keys." + key + ".customModelData") == keyCusModDat) {
 	        		return true;        		
 	        	}
@@ -500,6 +645,7 @@ public class Lock implements Listener {
 
 	    public String getKeyType(ItemStack item) {       
 	        ItemMeta meta = item.getItemMeta();
+	        if (!isKey(item)) return null;
 	        Integer keyCusModDat = meta.getCustomModelData();
 	        for (String keys : Main.inst.getConfig().getConfigurationSection("keys").getKeys(false)) {
 	        	if (Main.inst.getConfig().getInt("keys." + keys + ".customModelData") == keyCusModDat) {
