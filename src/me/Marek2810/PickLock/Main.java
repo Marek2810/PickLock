@@ -13,6 +13,7 @@ import me.Marek2810.PickLock.Commands.Key;
 import me.Marek2810.PickLock.Commands.LockCMD;
 import me.Marek2810.PickLock.Commands.Picklock;
 import me.Marek2810.PickLock.Files.DataManager;
+import net.md_5.bungee.api.ChatColor;
 
 public class Main extends JavaPlugin implements Listener {
 
@@ -20,7 +21,9 @@ public class Main extends JavaPlugin implements Listener {
     public static DataManager data;
     public static Lock lock;
 	public static LockCMD lockCMD;
+	
 	public static ConsoleCommandSender console;
+	public static String logPrefix;
     
     public static Set<String> yamlKeys;    
     public static List<String> chests;
@@ -43,10 +46,16 @@ public class Main extends JavaPlugin implements Listener {
 		this.getCommand("lock").setExecutor(new LockCMD());
     	this.getServer().getPluginManager().registerEvents(lock, this); 
     	this.saveDefaultConfig();
+    	logPrefix = "&7[&6PickLock&7] ";
+    	//loading block to locks
+    	console.sendMessage(ChatColor.translateAlternateColorCodes('&', logPrefix + "&eLoading blocks abble to locks..."));
     	chests = this.getConfig().getStringList("locking.chests");
     	doors = this.getConfig().getStringList("locking.doors");
     	trapdoors = this.getConfig().getStringList("locking.trapdoors");
+    	console.sendMessage(ChatColor.translateAlternateColorCodes('&', logPrefix + "&aLoaded blocks to lcoks."));
     	if (data.getConfig().getConfigurationSection("locks") != null) {
+    		//Loading locked blocks
+    		console.sendMessage(ChatColor.translateAlternateColorCodes('&', logPrefix + "&eLoading locked blocks..."));
         	yamlKeys = data.getConfig().getConfigurationSection("locks").getKeys(false);
         	if (yamlKeys != null) {
         		for (String lockID : yamlKeys) {
@@ -64,7 +73,8 @@ public class Main extends JavaPlugin implements Listener {
 	        			}	        			
 	        		}
 	        		yamlLocations.put(lockID, locs);
-	        	}        		
+	        	}
+            	console.sendMessage(ChatColor.translateAlternateColorCodes('&', logPrefix + "&aLoaded locked blocks."));
 	        }
         }
     }
