@@ -26,23 +26,38 @@ messages:
   to-lock: "&eKlikni pravým tlačítkem na zámek pro zamknutí."
   to-unlock: "&eKlikni pravým tlačítkem na zámek pro odemknutí."
   
+lockpiocking:
+  tutorial-item-title: "&aNávod"
+  lore:
+    - "  "
+    - "&bPosuň západky v správnom"
+    - "&bporadí pre otvorenie zámku."
+  options:
+    levels: 150
+    base-lockpick-chance: 97
+    lockpick-pin-multipler: 1.05
+    lockpick-level-multipler: 0.995
+    base-succes-xp: 1.5
+    xp-level-multipler: 1.015
+    xp-pin-multipler: 1.05
+  
 keys:
   basic:
     material: STICK
     type: basic
-    name: "&aZákladný kľuč"    
+    name: "&aBronzový klíč"    
     pick-difficulty: 3
     customModelData: 2810101
   advanced:
     material: STICK
     type: advanced
-    name: "&6Prokčilý kľuč"    
+    name: "&6Stříbrný klíč"    
     pick-difficulty: 6
     customModelData: 2810102
   pro:
     material: STICK
     type: pro
-    name: "&cPro kľuč"    
+    name: "&cDiamantový klíč"    
     pick-difficulty: 8
     customModelData: 2810103
 

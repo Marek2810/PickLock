@@ -6,6 +6,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import me.Marek2810.PickLock.Main;
@@ -194,6 +195,7 @@ public class LockCMD implements CommandExecutor {
 		return true;
 	}
 	
+	@EventHandler
 	public void onPlayerQuit (PlayerQuitEvent event) {
 		Player player = (Player) event.getPlayer();
 		if (removingLock.containsKey(player)) removingLock.remove(player);		

@@ -27,6 +27,11 @@ public class Picklock implements CommandExecutor {
     					return true;
         			}        			
     			}
+    			else if (args[0].equalsIgnoreCase("levels")) {
+    				Main.lockpick.generateLevels();
+    				Main.console.sendMessage(ChatColor.GREEN + "DONE!");
+    				return true;
+    			}
     			else {
     				String msg = Main.inst.getConfig().getString("messages.unknown-cmd");
     				sender.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));

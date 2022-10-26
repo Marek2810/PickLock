@@ -15,7 +15,11 @@ commands:
   key:
     permission: picklock.key
     permission-message: You do not have permission!
-    aliases: [kluc]    
+    aliases: [kluc]   
+  hook:
+    permission: picklock.hook
+    permission-message: You do not have permission!
+    aliases: [sperhak]  
 
 permissions:
   picklock.use:
@@ -78,4 +82,5 @@ permissions:
       picklock.lock: true       
       picklock.lock.info: true
       picklock.lock.remove: true
+      picklock.hook: true
       picklock.admin.*: true

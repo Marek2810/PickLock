@@ -45,7 +45,7 @@ public class Lock implements Listener {
 							|| Main.trapdoors.contains(typeOfClickeBlock.toString()) ) {
 	        			if ( hasLock(event.getClickedBlock().getLocation()) ) {
 	        				String lockID = getLockID( event.getClickedBlock().getLocation() );
-	        				ConfigurationSection lock = Main.data.getConfig().getConfigurationSection("locks." + lockID);
+	        				ConfigurationSection lock = Main.locks.getConfig().getConfigurationSection("locks." + lockID);
 	        				player.sendMessage(ChatColor.translateAlternateColorCodes('&', 
 	        						"&7------------ \n"
 	        						+ "&aLockID: &e" + lockID + "\n"
@@ -79,15 +79,15 @@ public class Lock implements Listener {
 							|| Main.trapdoors.contains(typeOfClickeBlock.toString()) ) {
 						if ( hasLock(event.getClickedBlock().getLocation()) ) {							
 							String lockID = getLockID( event.getClickedBlock().getLocation() );
-							String UUID = Main.data.getConfig().getString("locks." + lockID + ".owner");
+							String UUID = Main.locks.getConfig().getString("locks." + lockID + ".owner");
 							if (UUID.equals(player.getUniqueId().toString())) {							
 								Main.yamlIsLocked.remove(lockID);
 								Main.yamlKeyID.remove(lockID);
 								Main.yamlKeyType.remove(lockID);
 								Main.yamlKeys.remove(lockID);
 								Main.yamlLocations.remove(lockID);
-								Main.data.getConfig().set("locks." + lockID, null);
-								Main.data.saveConfig();							
+								Main.locks.getConfig().set("locks." + lockID, null);
+								Main.locks.saveConfig();							
 								String msg = Main.inst.getConfig().getString("messages.remove-lock");
 								player.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));							
 								event.setCancelled(true);	
@@ -134,8 +134,8 @@ public class Lock implements Listener {
 							Main.yamlKeyType.remove(lockID);
 							Main.yamlKeys.remove(lockID);							
 							Main.yamlLocations.remove(lockID);
-							Main.data.getConfig().set("locks." + lockID, null);
-							Main.data.saveConfig();							
+							Main.locks.getConfig().set("locks." + lockID, null);
+							Main.locks.saveConfig();							
 							String msg = Main.inst.getConfig().getString("messages.remove-lock");
 							player.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));							
 							event.setCancelled(true);	
@@ -172,8 +172,8 @@ public class Lock implements Listener {
 	                    		//unlock
 								String lockID = getLockID( event.getClickedBlock().getLocation() );
 		        				Main.yamlIsLocked.replace(lockID, true);
-	                    		Main.data.getConfig().set("locks." + lockID + ".locked", true);
-	                    		Main.data.saveConfig();
+	                    		Main.locks.getConfig().set("locks." + lockID + ".locked", true);
+	                    		Main.locks.saveConfig();
 	                    		String msg = Main.inst.getConfig().getString("messages.on-lock");
 	                    		player.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
 	                    		Main.lockCMD.adminLock.remove(player);
@@ -213,8 +213,8 @@ public class Lock implements Listener {
 	                    		//unlock
 								String lockID = getLockID( event.getClickedBlock().getLocation() );
 	                    		Main.yamlIsLocked.replace(lockID, false);
-	                    		Main.data.getConfig().set("locks." + lockID + ".locked", false);
-	                    		Main.data.saveConfig();
+	                    		Main.locks.getConfig().set("locks." + lockID + ".locked", false);
+	                    		Main.locks.saveConfig();
 	                    		String msg = Main.inst.getConfig().getString("messages.on-unlock");
 	                    		player.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));	                    		
 	                    		Main.console.sendMessage(ChatColor.translateAlternateColorCodes('&',
@@ -272,8 +272,8 @@ public class Lock implements Listener {
 	                            	if ( isLocked(event.getClickedBlock().getLocation()) ) {	                            		
 	                            		//unlock
 	                            		Main.yamlIsLocked.replace(lockID, false);
-	                            		Main.data.getConfig().set("locks." + lockID + ".locked", false);
-	                            		Main.data.saveConfig();
+	                            		Main.locks.getConfig().set("locks." + lockID + ".locked", false);
+	                            		Main.locks.saveConfig();
 	                            		String msg = Main.inst.getConfig().getString("messages.on-unlock");
 	                            		player.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
 	                            		Main.console.sendMessage(ChatColor.translateAlternateColorCodes('&',
@@ -285,8 +285,8 @@ public class Lock implements Listener {
 	                            	else {
 	                            		//lock
 	                            		Main.yamlIsLocked.replace(lockID, true);
-	                            		Main.data.getConfig().set("locks." + lockID + ".locked", true);
-	                            		Main.data.saveConfig();
+	                            		Main.locks.getConfig().set("locks." + lockID + ".locked", true);
+	                            		Main.locks.saveConfig();
 	                            		String msg = Main.inst.getConfig().getString("messages.on-lock");
 	                            		player.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
 	                            		Main.console.sendMessage(ChatColor.translateAlternateColorCodes('&',
@@ -522,28 +522,28 @@ public class Lock implements Listener {
 	    	int keyID = setKey(player);
 			String material = event.getClickedBlock().getType().toString();			
 			//Owner
-	        Main.data.getConfig().set("locks." + lockID + ".owner", player.getUniqueId().toString());
+	        Main.locks.getConfig().set("locks." + lockID + ".owner", player.getUniqueId().toString());
 	        //location
 	        List<Object> locs = new ArrayList<Object>();
 	        int i = 1;
 	        for (Location loc : locations) {
     			locs.add(loc.getWorld().getName() + ", " + loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ());
-    			Main.data.getConfig().set("locks." + lockID + ".location" + i, loc.getWorld().getName() + ", " + loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ());	
+    			Main.locks.getConfig().set("locks." + lockID + ".location" + i, loc.getWorld().getName() + ", " + loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ());	
     			i++;
 	        }
 	        Main.yamlLocations.put(sLockID, locs);
 	        //material
-	        Main.data.getConfig().set("locks." + lockID + ".material", material);	
+	        Main.locks.getConfig().set("locks." + lockID + ".material", material);	
 	        //key type
-	        Main.data.getConfig().set("locks." + lockID + ".keyType", getKeyType( event.getPlayer().getInventory().getItemInMainHand() ));
+	        Main.locks.getConfig().set("locks." + lockID + ".keyType", getKeyType( event.getPlayer().getInventory().getItemInMainHand() ));
 	        //keyID
-	        Main.data.getConfig().set("locks." + lockID + ".keyID", keyID);
+	        Main.locks.getConfig().set("locks." + lockID + ".keyID", keyID);
 	        //locked
-	        Main.data.getConfig().set("locks." + lockID + ".locked", true);
+	        Main.locks.getConfig().set("locks." + lockID + ".locked", true);
 	        //lockpath
-	        Main.data.getConfig().set("locks." + lockID + ".lockPath", lockPickPath);
-			Main.data.saveConfig();		
-			Main.yamlKeys = Main.data.getConfig().getConfigurationSection("locks").getKeys(false);
+	        Main.locks.getConfig().set("locks." + lockID + ".lockPath", lockPickPath);
+			Main.locks.saveConfig();		
+			Main.yamlKeys = Main.locks.getConfig().getConfigurationSection("locks").getKeys(false);
         	Main.yamlIsLocked.put(sLockID, true);
         	Main.yamlKeyID.put(sLockID, keyID);   
         	Main.yamlKeyType.put(sLockID, getKeyType( event.getPlayer().getInventory().getItemInMainHand() ));
@@ -637,7 +637,7 @@ public class Lock implements Listener {
 	    }
 
 	    public boolean isKeyUsed(Integer keyID) {
-	        ConfigurationSection locks = Main.data.getConfig().getConfigurationSection("locks");
+	        ConfigurationSection locks = Main.locks.getConfig().getConfigurationSection("locks");
 	        if (locks == null) return false;
 	        if (Main.yamlKeyID.containsValue(keyID)) return true;
 	        return false;

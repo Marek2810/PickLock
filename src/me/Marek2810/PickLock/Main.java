@@ -9,6 +9,7 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import me.Marek2810.PickLock.Commands.Hook;
 import me.Marek2810.PickLock.Commands.Key;
 import me.Marek2810.PickLock.Commands.LockCMD;
 import me.Marek2810.PickLock.Commands.Picklock;
@@ -18,10 +19,12 @@ import net.md_5.bungee.api.ChatColor;
 public class Main extends JavaPlugin implements Listener {
 
     public static Main inst;   
-    public static DataManager data;
+    public static DataManager locks;
+    public static DataManager playerData;
     public static Lock lock;
     public static Lockpick lockpick;
 	public static LockCMD lockCMD;
+	public static Hook hook;
 	
 	public static ConsoleCommandSender console;
 	public static String logPrefix;
@@ -39,13 +42,16 @@ public class Main extends JavaPlugin implements Listener {
     public void onEnable() {
     	inst = this;    	
     	console = this.getServer().getConsoleSender();
-    	data = new DataManager(this, "locks.yml");
+    	locks = new DataManager(this, "locks.yml");
+    	playerData = new DataManager(this, "data.yml");
     	lock = new Lock();
     	lockpick = new Lockpick();
 		lockCMD = new LockCMD();
+		hook = new Hook();
     	this.getCommand("picklock").setExecutor(new Picklock());
     	this.getCommand("key").setExecutor(new Key());
 		this.getCommand("lock").setExecutor(new LockCMD());
+		this.getCommand("hook").setExecutor(new Hook());
     	this.getServer().getPluginManager().registerEvents(lock, this);
     	this.getServer().getPluginManager().registerEvents(lockpick, this); 
     	this.saveDefaultConfig();
@@ -56,20 +62,20 @@ public class Main extends JavaPlugin implements Listener {
     	doors = this.getConfig().getStringList("locking.doors");
     	trapdoors = this.getConfig().getStringList("locking.trapdoors");
     	console.sendMessage(ChatColor.translateAlternateColorCodes('&', logPrefix + "&aLoaded blocks to lcoks."));
-    	if (data.getConfig().getConfigurationSection("locks") != null) {
+    	if (locks.getConfig().getConfigurationSection("locks") != null) {
     		//Loading locked blocks
     		console.sendMessage(ChatColor.translateAlternateColorCodes('&', logPrefix + "&eLoading locked blocks..."));
-        	yamlKeys = data.getConfig().getConfigurationSection("locks").getKeys(false);
+        	yamlKeys = locks.getConfig().getConfigurationSection("locks").getKeys(false);
         	if (yamlKeys != null) {
         		for (String lockID : yamlKeys) {
-	        		yamlIsLocked.put(lockID, data.getConfig().getBoolean("locks." + lockID + ".locked") );
-	        		yamlKeyID.put(lockID, data.getConfig().getInt("locks." + lockID + ".keyID"));
-	        		yamlKeyType.put(lockID, data.getConfig().getString("locks." + lockID + ".keyType"));
+	        		yamlIsLocked.put(lockID, locks.getConfig().getBoolean("locks." + lockID + ".locked") );
+	        		yamlKeyID.put(lockID, locks.getConfig().getInt("locks." + lockID + ".keyID"));
+	        		yamlKeyType.put(lockID, locks.getConfig().getString("locks." + lockID + ".keyType"));
 	        		List<Object> locs = new ArrayList<Object>();
 	        		for (int i = 1; i <= 4; i++ ) {
-	        			Object get = data.getConfig().get("locks." + lockID + ".location" + i);	        			
+	        			Object get = locks.getConfig().get("locks." + lockID + ".location" + i);	        			
 	        			if (get != null ) {
-	        				locs.add(data.getConfig().get("locks." + lockID + ".location" + i));
+	        				locs.add(locks.getConfig().get("locks." + lockID + ".location" + i));
 	        			}
 	        			else {
 	        				break;
@@ -80,6 +86,9 @@ public class Main extends JavaPlugin implements Listener {
             	console.sendMessage(ChatColor.translateAlternateColorCodes('&', logPrefix + "&aLoaded locked blocks."));
 	        }
         }
+    	console.sendMessage(ChatColor.translateAlternateColorCodes('&', logPrefix + "&eLoading levels..."));
+    	Main.lockpick.generateLevels();
+    	console.sendMessage(ChatColor.translateAlternateColorCodes('&', logPrefix + "&aLevels loaded."));
     }
 
     @Override
