@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -37,11 +38,16 @@ public class Main extends JavaPlugin implements Listener {
     public static HashMap<String, Integer> yamlKeyID = new HashMap<String, Integer>();
     public static HashMap<String, String> yamlKeyType = new HashMap<String, String>();
     public static HashMap<String, List<Object>> yamlLocations = new HashMap<String, List<Object>>();  
+    public static ConfigurationSection messages;
     
+    public static ConfigurationSection lockpickGui;
+    public static ConfigurationSection lockpickOptions;
+         
     @Override
     public void onEnable() {
     	inst = this;    	
     	console = this.getServer().getConsoleSender();
+    	this.saveDefaultConfig();
     	locks = new DataManager(this, "locks.yml");
     	playerData = new DataManager(this, "data.yml");
     	lock = new Lock();
@@ -53,8 +59,7 @@ public class Main extends JavaPlugin implements Listener {
 		this.getCommand("lock").setExecutor(new LockCMD());
 		this.getCommand("hook").setExecutor(new Hook());
     	this.getServer().getPluginManager().registerEvents(lock, this);
-    	this.getServer().getPluginManager().registerEvents(lockpick, this); 
-    	this.saveDefaultConfig();
+    	this.getServer().getPluginManager().registerEvents(lockpick, this);     	
     	logPrefix = "&7[&6PickLock&7] ";
     	//loading block to locks
     	console.sendMessage(ChatColor.translateAlternateColorCodes('&', logPrefix + "&eLoading blocks abble to locks..."));
@@ -86,9 +91,22 @@ public class Main extends JavaPlugin implements Listener {
             	console.sendMessage(ChatColor.translateAlternateColorCodes('&', logPrefix + "&aLoaded locked blocks."));
 	        }
         }
+    	//lockpicking
+    	//loading options
+    	console.sendMessage(ChatColor.translateAlternateColorCodes('&', logPrefix + "&eLoading lockpicking options..."));
+    	lockpickGui = this.getConfig().getConfigurationSection("lockpicking.hook-gui");
+    	lockpickOptions = this.getConfig().getConfigurationSection("lockpicking.options");
+    	console.sendMessage(ChatColor.translateAlternateColorCodes('&', logPrefix + "&aLockpicking options loaded."));
+    	
+    	//creating levels
     	console.sendMessage(ChatColor.translateAlternateColorCodes('&', logPrefix + "&eLoading levels..."));
-    	Main.lockpick.generateLevels();
+    	lockpick.generateLevels();
     	console.sendMessage(ChatColor.translateAlternateColorCodes('&', logPrefix + "&aLevels loaded."));
+    	
+    	console.sendMessage(ChatColor.translateAlternateColorCodes('&', logPrefix + "&eLoading messages..."));
+    	messages = this.getConfig().getConfigurationSection("messages");
+    	console.sendMessage(ChatColor.translateAlternateColorCodes('&', logPrefix + "&aMessages loaded."));
+    	
     }
 
     @Override

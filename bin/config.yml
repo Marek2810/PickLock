@@ -25,13 +25,19 @@ messages:
   need-to-hold-key: "&cMusíš v ruke držať kľúč."
   to-lock: "&eKlikni pravým tlačítkem na zámek pro zamknutí."
   to-unlock: "&eKlikni pravým tlačítkem na zámek pro odemknutí."
-  
-lockpiocking:
-  tutorial-item-title: "&aNávod"
-  lore:
-    - "  "
-    - "&bPosuň západky v správnom"
-    - "&bporadí pre otvorenie zámku."
+  bad-pin: "&cZlá západka."
+  on-hook-broke: "&cZlomil si šperhák."
+  on-lockpick: "&aÚspešne si lockpickol zámok."
+ 
+lockpicking:
+  hook-gui:
+    inventory-title: "&8&lLockpick"
+    tutorial-item-title: "&aNávod"
+    pin-item-title: "&9Západka"
+    lore:
+      - "  "
+      - "&bPosuň západky v správnom"
+      - "&bporadí pre otvorenie zámku."
   options:
     levels: 150
     base-lockpick-chance: 97

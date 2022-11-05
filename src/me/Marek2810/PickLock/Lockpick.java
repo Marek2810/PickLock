@@ -44,11 +44,11 @@ public class Lockpick implements Listener {
     	ItemStack hookItem = new ItemStack(Material.STICK);
     	ItemStack glassItem = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
     	ItemMeta hookMeta = hookItem.getItemMeta();
-    	hookMeta.setDisplayName( ChatColor.translateAlternateColorCodes('&', "&aNávod") );
+    	hookMeta.setDisplayName( ChatColor.translateAlternateColorCodes('&', Main.lockpickGui.getString("tutorial-item-title")) );
     	List<String> hookLore = new ArrayList<String>();
-    	hookLore.add("  ");
-    	hookLore.add(ChatColor.translateAlternateColorCodes('&', "&bPosuň západky v správnom"));
-    	hookLore.add(ChatColor.translateAlternateColorCodes('&', "&bporadí pre otvorenie zámku."));
+    	for (String loreLine : Main.lockpickGui.getStringList("lore")) {
+    		hookLore.add(ChatColor.translateAlternateColorCodes('&', loreLine));
+    	}
     	hookMeta.setCustomModelData(2810201);
     	hookMeta.setLore(hookLore);
     	hookItem.setItemMeta(hookMeta);   	  	
@@ -72,53 +72,16 @@ public class Lockpick implements Listener {
         
     public void generateLevels() {
     	DecimalFormat numberFormat = new DecimalFormat("#.0000");
-    	for (int i = 1; i <= 5; i++) {  
-    		//Main.console.sendMessage("i = " + i);
+    	for (int i = 1; i <= 250; i++) {  
     		if (i == 1) {
     			levels.put(i, 0.0);
-    			//Main.console.sendMessage("Need xp: " + 0);
-				/*
-				 * for (int j = 1; j <= 8; j++) { if (j == 1) {
-				 * Main.console.sendMessage("Chance " + j + " :" + 97); } else {
-				 * Main.console.sendMessage("Chance " + j + " :" +
-				 * numberFormat.format(97*(Math.pow(1.05, j-1))) ); } } for (int j = 1; j <= 8;
-				 * j++) { if (j == 1) { Main.console.sendMessage("XP " + j + " :" + 1.5); } else
-				 * { Main.console.sendMessage("XP " + j + " :" +
-				 * numberFormat.format(1.5*(Math.pow(1.05, j-1))) ); } }
-				 */
     		}
     		else if (i == 2) {
     			levels.put(i, 15.0);
-    			//Main.console.sendMessage("Need xp: " + 15);
-				/*
-				 * for (int j = 1; j <= 8; j++) { if (j == 1) {
-				 * Main.console.sendMessage("Chance " + j + " :" +
-				 * numberFormat.format(97*(Math.pow(0.995, i-1)) )); } else {
-				 * Main.console.sendMessage("Chance " + j + " :" +
-				 * numberFormat.format(97*(Math.pow(0.995, i-1))*(Math.pow(1.05, j-1))) ); } }
-				 * for (int j = 1; j <= 8; j++) { if (j == 1) { Main.console.sendMessage("XP " +
-				 * j + " :" + numberFormat.format(1.5*(Math.pow(1.015, i-1)))); } else {
-				 * Main.console.sendMessage("XP " + j + " :" +
-				 * numberFormat.format(1.5*(Math.pow(1.015, i-1))*(Math.pow(1.05, j-1))) ); } }
-				 */
     		}
     		else {
     			double needXP = Double.valueOf( numberFormat.format( (levels.get(i-1)+(levels.get(i-1)-levels.get(i-2) )*1.05)) );	 
-    			levels.put(i, needXP );
-    			//Main.console.sendMessage("Need xp: " + needXP );
-				
-				
-				/*
-				 * for (int j = 1; j <= 8; j++) { if (j == 1) {
-				 * Main.console.sendMessage("Chance " + j + " :" +
-				 * numberFormat.format(97*(Math.pow(0.995, i-1)) )); } else {
-				 * Main.console.sendMessage("Chance " + j + " :" +
-				 * numberFormat.format(97*(Math.pow(0.995, i-1))*(Math.pow(1.05, j-1))) ); } }
-				 * for (int j = 1; j <= 8; j++) { if (j == 1) { Main.console.sendMessage("XP " +
-				 * j + " :" + numberFormat.format(1.5*(Math.pow(1.015, i-1)))); } else {
-				 * Main.console.sendMessage("XP " + j + " :" +
-				 * numberFormat.format(1.5*(Math.pow(1.015, i-1))*(Math.pow(1.05, j-1))) ); } }
-				 */			   		
+    			levels.put(i, needXP );		   		
     		}
     	}
     }
@@ -158,6 +121,7 @@ public class Lockpick implements Listener {
 						if ( playerCahnce <= chance) {
 							player.getInventory().removeItem(item);
 							player.closeInventory();
+							player.sendMessage(ChatColor.translateAlternateColorCodes('&', Main.messages.getString("on-hook-broke")));
 						}
 					}
 					else if (lastPin.get(player) == 1) {
@@ -165,6 +129,7 @@ public class Lockpick implements Listener {
 						if ( playerCahnce <= chance) {
 							player.getInventory().removeItem(item);
 							player.closeInventory();
+							player.sendMessage(ChatColor.translateAlternateColorCodes('&', Main.messages.getString("on-hook-broke")));
 						}
 					}
 					else {
@@ -172,6 +137,7 @@ public class Lockpick implements Listener {
 						if ( playerCahnce <= chance) {
 							player.getInventory().removeItem(item);
 							player.closeInventory();
+							player.sendMessage(ChatColor.translateAlternateColorCodes('&', Main.messages.getString("on-hook-broke")));
 						}
 					}
 				}
@@ -182,29 +148,32 @@ public class Lockpick implements Listener {
 						if ( playerCahnce <= chance) {
 							player.getInventory().removeItem(item);
 							player.closeInventory();
+							player.sendMessage(ChatColor.translateAlternateColorCodes('&', Main.messages.getString("on-hook-broke")));
 						}
 					}
 					else if (lastPin.get(player) == 1) {
 						chance = chance*(Math.pow(0.995, playerLevel-1))*1.05;
 						playerXP = playerXP-(((1.5*Math.pow(1.015, playerLevel-1))*1.05)*0.5);
 						if ( playerCahnce <= chance) {
-							player.getInventory().removeItem(item);
+							player.getInventory().removeItem(item);							
 							player.closeInventory();
+							player.sendMessage(ChatColor.translateAlternateColorCodes('&', Main.messages.getString("on-hook-broke")));
 						}
 					}
 					else {
 						chance = chance*(Math.pow(0.995, playerLevel-1))*Math.pow(1.05, lastPin.get(player));
 						playerXP = playerXP-((1.5*Math.pow(1.015, playerLevel-1))*(Math.pow(1.05, lastPin.get(player)))*0.5);
 						if ( playerCahnce <= chance) {
-							player.getInventory().removeItem(item);
+							player.getInventory().removeItem(item);							
 							player.closeInventory();
+							player.sendMessage(ChatColor.translateAlternateColorCodes('&', Main.messages.getString("on-hook-broke")));
 						}
 					}
 					playerPickXP.put( player.getUniqueId(), Double.valueOf(numberFormat.format(playerXP)) );
 					Main.playerData.getConfig().set("players." + player.getUniqueId() + ".xp" , playerPickXP.get(player.getUniqueId()));
 					Main.playerData.saveConfig();				
 				}							
-				player.sendMessage(ChatColor.RED + "Zlá západka.");
+				player.sendMessage(ChatColor.translateAlternateColorCodes('&', Main.messages.getString("bad-pin")));
 				
 			}
 		}
@@ -229,7 +198,7 @@ public class Lockpick implements Listener {
 				}
 			}			
 			Main.playerData.saveConfig();
-			player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&aÚspešne si lockpickol zámok."));
+			player.sendMessage(ChatColor.translateAlternateColorCodes('&', Main.messages.getString("on-lockpick")));
 			Block block = Main.lock.lockpicking.get(player);
 			Location loc = block.getLocation();
 			String lockID = Main.lock.getLockID(loc);
@@ -262,7 +231,7 @@ public class Lockpick implements Listener {
     public void setPins(Inventory inv, String lockID) {
     	ItemStack pinItem = new ItemStack(Material.IRON_INGOT);
         ItemMeta pinMeta = pinItem.getItemMeta();
-        pinMeta.setDisplayName("Západka");
+        pinMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', Main.lockpickGui.getString("pin-item-title")));
         pinItem.setItemMeta(pinMeta);
         for (int pin :  getPins(lockID) ) {
         	inv.setItem(pin, pinItem);        	
@@ -270,8 +239,7 @@ public class Lockpick implements Listener {
     }
     
     public void openLockpickInv(Player player, String lockID) {
-    	
-    	Inventory inv = Bukkit.createInventory(null, 27,ChatColor.DARK_GRAY + "" + ChatColor.BOLD + "Lockpick");
+    	Inventory inv = Bukkit.createInventory(null, 27, ChatColor.translateAlternateColorCodes('&', Main.lockpickGui.getString("inventory-title"))) ;
     	createInv(inv);
     	setPins(inv, lockID);
     	invPins.put(inv, getPins(lockID));
