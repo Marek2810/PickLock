@@ -43,6 +43,9 @@ public class Lockpick implements Listener {
     	
     	ItemStack hookItem = new ItemStack(Material.STICK);
     	ItemStack glassItem = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
+    	ItemMeta glassMeta = glassItem.getItemMeta();
+    	glassMeta.setDisplayName("  ");
+    	glassItem.setItemMeta(glassMeta);
     	ItemMeta hookMeta = hookItem.getItemMeta();
     	hookMeta.setDisplayName( ChatColor.translateAlternateColorCodes('&', Main.lockpickGui.getString("tutorial-item-title")) );
     	List<String> hookLore = new ArrayList<String>();
