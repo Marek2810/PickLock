@@ -242,6 +242,7 @@ public class Lockpick implements Listener {
     }
     
     public void openLockpickInv(Player player, String lockID) {
+    	if (lockID == null ) lockID = "hovno";
     	Inventory inv = Bukkit.createInventory(null, 27, ChatColor.translateAlternateColorCodes('&', Main.lockpickGui.getString("inventory-title"))) ;
     	createInv(inv);
     	setPins(inv, lockID);

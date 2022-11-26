@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -66,7 +67,7 @@ public class Main extends JavaPlugin implements Listener {
     	chests = this.getConfig().getStringList("locking.chests");
     	doors = this.getConfig().getStringList("locking.doors");
     	trapdoors = this.getConfig().getStringList("locking.trapdoors");
-    	console.sendMessage(ChatColor.translateAlternateColorCodes('&', logPrefix + "&aLoaded blocks to lcoks."));
+    	console.sendMessage(ChatColor.translateAlternateColorCodes('&', logPrefix + "&aLoaded blocks to lock."));
     	if (locks.getConfig().getConfigurationSection("locks") != null) {
     		//Loading locked blocks
     		console.sendMessage(ChatColor.translateAlternateColorCodes('&', logPrefix + "&eLoading locked blocks..."));
@@ -106,6 +107,7 @@ public class Main extends JavaPlugin implements Listener {
     	console.sendMessage(ChatColor.translateAlternateColorCodes('&', logPrefix + "&eLoading messages..."));
     	messages = this.getConfig().getConfigurationSection("messages");
     	console.sendMessage(ChatColor.translateAlternateColorCodes('&', logPrefix + "&aMessages loaded."));
+    	
     	
     }
 
