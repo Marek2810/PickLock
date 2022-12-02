@@ -1,4 +1,4 @@
-main: me.Marek2810.PickLock.Main
+main: me.Marek2810.PickLock.PickLock
 name: PickLock
 version: 1.2
 author: Marek2810
@@ -8,6 +8,7 @@ commands:
   picklock:
     permission: picklock.picklock
     permission-message: You do not have permission!
+    aliases: [plock]
   lock:
     permission: picklock.lock
     permission-message: You do not have permission!

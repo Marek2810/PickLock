@@ -9,18 +9,26 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import me.Marek2810.PickLock.Commands.Key;
-import me.Marek2810.PickLock.Commands.LockCMD;
-import me.Marek2810.PickLock.Commands.Picklock;
+import me.Marek2810.PickLock.Commands.KeyCommand;
+import me.Marek2810.PickLock.Commands.LockCommand;
+import me.Marek2810.PickLock.Commands.PickLockCommand;
+import me.Marek2810.PickLock.Commands.Listeners.AdminLockCmdListener;
+import me.Marek2810.PickLock.Commands.Listeners.AdminRemoveCmdListener;
+import me.Marek2810.PickLock.Commands.Listeners.AdminUnlockCmdListener;
+import me.Marek2810.PickLock.Commands.Listeners.InfoCmdListener;
+import me.Marek2810.PickLock.Commands.Listeners.PlayerListener;
+import me.Marek2810.PickLock.Commands.Listeners.RemoveCmdListener;
 import me.Marek2810.PickLock.Files.DataManager;
+import me.Marek2810.PickLock.Listener.BlockListener;
+import me.Marek2810.PickLock.Listener.ClickNoKey;
+import me.Marek2810.PickLock.Listener.ClickWithKey;
 import net.md_5.bungee.api.ChatColor;
 
-public class Main extends JavaPlugin implements Listener {
+public class PickLock extends JavaPlugin implements Listener {
 
-    public static Main inst;   
+    public static PickLock inst;   
     public static DataManager data;
-    public static Lock lock;
-	public static LockCMD lockCMD;
+	public static LockCommand lockCMD;
 	
 	public static ConsoleCommandSender console;
 	public static String logPrefix;
@@ -39,13 +47,21 @@ public class Main extends JavaPlugin implements Listener {
     	inst = this;    	
     	console = this.getServer().getConsoleSender();
     	data = new DataManager(this, "locks.yml");
-    	lock = new Lock();
-		lockCMD = new LockCMD();
-    	this.getCommand("picklock").setExecutor(new Picklock());
-    	this.getCommand("key").setExecutor(new Key());
-		this.getCommand("lock").setExecutor(new LockCMD());
-    	this.getServer().getPluginManager().registerEvents(lock, this); 
     	this.saveDefaultConfig();
+    	this.getCommand("picklock").setExecutor(new PickLockCommand());
+    	this.getCommand("key").setExecutor(new KeyCommand());
+		this.getCommand("lock").setExecutor(new LockCommand());
+		this.getServer().getPluginManager().registerEvents(new AdminLockCmdListener(), this);
+		this.getServer().getPluginManager().registerEvents(new AdminRemoveCmdListener(), this);
+		this.getServer().getPluginManager().registerEvents(new AdminUnlockCmdListener(), this);
+		this.getServer().getPluginManager().registerEvents(new InfoCmdListener(), this);
+		this.getServer().getPluginManager().registerEvents(new PlayerListener(), this);
+		this.getServer().getPluginManager().registerEvents(new RemoveCmdListener(), this);
+		
+		this.getServer().getPluginManager().registerEvents(new BlockListener(), this);
+		this.getServer().getPluginManager().registerEvents(new ClickNoKey(), this);
+		this.getServer().getPluginManager().registerEvents(new ClickWithKey(), this);
+		
     	logPrefix = "&7[&6PickLock&7] ";
     	//loading block to locks
     	console.sendMessage(ChatColor.translateAlternateColorCodes('&', logPrefix + "&eLoading blocks abble to locks..."));

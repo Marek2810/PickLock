@@ -4,10 +4,11 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-import me.Marek2810.PickLock.Main;
+import me.Marek2810.PickLock.PickLock;
+import me.Marek2810.PickLock.Utils.ChatUtils;
 import net.md_5.bungee.api.ChatColor;
 
-public class Picklock implements CommandExecutor {
+public class PickLockCommand implements CommandExecutor {
 	
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -15,21 +16,18 @@ public class Picklock implements CommandExecutor {
     			// /picklock reload
     			if (args[0].equalsIgnoreCase("reload")) {
     				if (sender.hasPermission("picklock.picklock.reload")) {
-    					String msg = Main.inst.getConfig().getString("messages.reload");
-            			sender.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
-            			Main.inst.reloadConfig();
+            			sender.sendMessage(ChatColor.translateAlternateColorCodes('&', ChatUtils.getMessage("reload") ));
+            			PickLock.inst.reloadConfig();
             			return true;
         			} 
     				else {
     					//no permissions
-    					String msg = Main.inst.getConfig().getString("messages.no-permission");
-        				sender.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
+        				sender.sendMessage(ChatColor.translateAlternateColorCodes('&', ChatUtils.getMessage("no-permission") ));
     					return true;
         			}        			
     			}
     			else {
-    				String msg = Main.inst.getConfig().getString("messages.unknown-cmd");
-    				sender.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
+    				sender.sendMessage(ChatColor.translateAlternateColorCodes('&', ChatUtils.getMessage("unknown-cmd") ));
     				return true;
     			}
     				
