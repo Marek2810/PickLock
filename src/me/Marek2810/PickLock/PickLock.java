@@ -22,6 +22,7 @@ import me.Marek2810.PickLock.Files.DataManager;
 import me.Marek2810.PickLock.Listener.BlockListener;
 import me.Marek2810.PickLock.Listener.ClickNoKey;
 import me.Marek2810.PickLock.Listener.ClickWithKey;
+import me.Marek2810.PickLock.Listener.RedstoneListener;
 import net.md_5.bungee.api.ChatColor;
 
 public class PickLock extends JavaPlugin implements Listener {
@@ -57,6 +58,7 @@ public class PickLock extends JavaPlugin implements Listener {
 		this.getServer().getPluginManager().registerEvents(new InfoCmdListener(), this);
 		this.getServer().getPluginManager().registerEvents(new PlayerListener(), this);
 		this.getServer().getPluginManager().registerEvents(new RemoveCmdListener(), this);
+		this.getServer().getPluginManager().registerEvents(new RedstoneListener(), this);
 		
 		this.getServer().getPluginManager().registerEvents(new BlockListener(), this);
 		this.getServer().getPluginManager().registerEvents(new ClickNoKey(), this);

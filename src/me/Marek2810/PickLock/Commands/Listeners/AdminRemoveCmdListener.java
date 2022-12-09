@@ -20,7 +20,7 @@ public class AdminRemoveCmdListener implements Listener {
 		if ( !(event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) ) return;
 		if ( event.getClickedBlock() == null ) return;
        	Player player = (Player) event.getPlayer();
-       	if ( !(LockCommand.adminRemovingLock.get(player)) ) return;
+       	if ( LockCommand.adminRemovingLock.get(player) == null || !(LockCommand.adminRemovingLock.get(player)) ) return;
         String typeOfClickeBlock = event.getClickedBlock().getType().toString();	
         Location loc = event.getClickedBlock().getLocation();
         if ( !(LockUtils.isLockable(typeOfClickeBlock)) ) return;

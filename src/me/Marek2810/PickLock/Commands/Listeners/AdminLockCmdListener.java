@@ -20,7 +20,7 @@ public class AdminLockCmdListener implements Listener {
 		if ( !(event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) ) return;
 		if ( event.getClickedBlock() == null ) return;
        	Player player = (Player) event.getPlayer();
-       	if ( !(LockCommand.adminLock.get(player)) ) return;
+       	if ( LockCommand.adminLock.get(player) == null || !(LockCommand.adminLock.get(player)) ) return;
         String typeOfClickeBlock = event.getClickedBlock().getType().toString();	
         Location loc = event.getClickedBlock().getLocation();
         if ( !(LockUtils.isLockable(typeOfClickeBlock)) ) return;

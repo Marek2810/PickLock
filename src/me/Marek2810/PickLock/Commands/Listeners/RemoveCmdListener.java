@@ -20,7 +20,7 @@ public class RemoveCmdListener implements Listener{
 		if ( !(event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) ) return;
 		if ( event.getClickedBlock() == null ) return;
        	Player player = (Player) event.getPlayer();
-       	if ( !(LockCommand.removingLock.get(player)) ) return;
+       	if ( LockCommand.removingLock.get(player) == null || !(LockCommand.removingLock.get(player)) ) return;
         String typeOfClickeBlock = event.getClickedBlock().getType().toString();	
         Location loc = event.getClickedBlock().getLocation();
         if ( !(LockUtils.isLockable(typeOfClickeBlock)) ) return;
