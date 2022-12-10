@@ -56,8 +56,8 @@ public class ClickWithKey implements Listener {
                     	if ( LockUtils.isLocked(event.getClickedBlock().getLocation()) ) {	                            		
                     		//unlock
                     		PickLock.yamlIsLocked.replace(lockID, false);
-                    		PickLock.data.getConfig().set("locks." + lockID + ".locked", false);
-                    		PickLock.data.saveConfig();
+                    		PickLock.locks.getConfig().set("locks." + lockID + ".locked", false);
+                    		PickLock.locks.saveConfig();
                     		String msg = PickLock.inst.getConfig().getString("messages.on-unlock");
                     		player.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
                     		PickLock.console.sendMessage(ChatColor.translateAlternateColorCodes('&',
@@ -68,8 +68,8 @@ public class ClickWithKey implements Listener {
                     	else {
                     		//lock
                     		PickLock.yamlIsLocked.replace(lockID, true);
-                    		PickLock.data.getConfig().set("locks." + lockID + ".locked", true);
-                    		PickLock.data.saveConfig();
+                    		PickLock.locks.getConfig().set("locks." + lockID + ".locked", true);
+                    		PickLock.locks.saveConfig();
                     		String msg = PickLock.inst.getConfig().getString("messages.on-lock");
                     		player.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
                     		PickLock.console.sendMessage(ChatColor.translateAlternateColorCodes('&',
@@ -94,6 +94,7 @@ public class ClickWithKey implements Listener {
 			}	        			
 			//Not having a lock
 			else {
+				event.setCancelled(true);
 				ItemMeta meta = itemInMainHand.getItemMeta();
 				boolean hasLore = meta.hasLore();
 				//Is key used?

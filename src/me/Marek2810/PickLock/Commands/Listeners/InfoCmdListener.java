@@ -28,7 +28,7 @@ public class InfoCmdListener implements Listener {
         if ( LockUtils.hasLock(loc) ) {
 			event.setCancelled(true);
 			String lockID = LockUtils.getLockID(loc);
-			ConfigurationSection lock = PickLock.data.getConfig().getConfigurationSection("locks." + lockID);
+			ConfigurationSection lock = PickLock.locks.getConfig().getConfigurationSection("locks." + lockID);
 			player.sendMessage(ChatColor.translateAlternateColorCodes('&', 
 					"&7------------ \n"
 					+ "&aLockID: &e" + lockID + "\n"

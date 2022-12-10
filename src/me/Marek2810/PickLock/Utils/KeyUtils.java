@@ -61,7 +61,7 @@ public class KeyUtils {
     }
 
     public static boolean isKeyUsed(Integer keyID) {
-        ConfigurationSection locks = PickLock.data.getConfig().getConfigurationSection("locks");
+        ConfigurationSection locks = PickLock.locks.getConfig().getConfigurationSection("locks");
         if (locks == null) return false;
         if (PickLock.yamlKeyID.containsValue(keyID)) return true;
         return false;

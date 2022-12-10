@@ -24,13 +24,13 @@ public class LockUtils {
 		PickLock.yamlKeyType.remove(lockID);
 		PickLock.yamlKeys.remove(lockID);
 		PickLock.yamlLocations.remove(lockID);
-		PickLock.data.getConfig().set("locks." + lockID, null);
-		PickLock.data.saveConfig();
+		PickLock.locks.getConfig().set("locks." + lockID, null);
+		PickLock.locks.saveConfig();
 	}
 	
 	public static boolean isOwner(Player player, String lockID) {
 		String UUID = player.getUniqueId().toString();
-		String owner = PickLock.data.getConfig().getString("locks." + lockID + ".owner");
+		String owner = PickLock.locks.getConfig().getString("locks." + lockID + ".owner");
 		if (UUID.equals(owner)) return true;
 		return false;
 	}
@@ -82,29 +82,41 @@ public class LockUtils {
     	int keyID = KeyUtils.setKey(player);
 		String material = event.getClickedBlock().getType().toString();			
 		//Owner
-        PickLock.data.getConfig().set("locks." + lockID + ".owner", player.getUniqueId().toString());
+        PickLock.locks.getConfig().set("locks." + lockID + ".owner", player.getUniqueId().toString());
         //location
         List<Object> locs = new ArrayList<Object>();
         int i = 1;
         for (Location loc : locations) {
 			locs.add(loc.getWorld().getName() + ", " + loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ());
-			PickLock.data.getConfig().set("locks." + lockID + ".location" + i, loc.getWorld().getName() + ", " + loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ());	
+			PickLock.locks.getConfig().set("locks." + lockID + ".location" + i, loc.getWorld().getName() + ", " + loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ());	
 			i++;
         }
         PickLock.yamlLocations.put(sLockID, locs);
         //material
-        PickLock.data.getConfig().set("locks." + lockID + ".material", material);	
+        PickLock.locks.getConfig().set("locks." + lockID + ".material", material);	
         //key type
-        PickLock.data.getConfig().set("locks." + lockID + ".keyType", KeyUtils.getKeyType( event.getPlayer().getInventory().getItemInMainHand() ));
+        PickLock.locks.getConfig().set("locks." + lockID + ".keyType", KeyUtils.getKeyType( event.getPlayer().getInventory().getItemInMainHand() ));
         //keyID
-        PickLock.data.getConfig().set("locks." + lockID + ".keyID", keyID);
+        PickLock.locks.getConfig().set("locks." + lockID + ".keyID", keyID);
         //locked
-        PickLock.data.getConfig().set("locks." + lockID + ".locked", true);
-		PickLock.data.saveConfig();		
-		PickLock.yamlKeys = PickLock.data.getConfig().getConfigurationSection("locks").getKeys(false);
+        PickLock.locks.getConfig().set("locks." + lockID + ".locked", true);
+		PickLock.locks.saveConfig();		
+		PickLock.yamlKeys = PickLock.locks.getConfig().getConfigurationSection("locks").getKeys(false);
     	PickLock.yamlIsLocked.put(sLockID, true);
     	PickLock.yamlKeyID.put(sLockID, keyID);   
     	PickLock.yamlKeyType.put(sLockID, KeyUtils.getKeyType( event.getPlayer().getInventory().getItemInMainHand() ));
     	return;
     }
+	
+	public static void addLocationToLock(String lockID, List<Location> locs, int lastLoc) {	
+		List<Object> savedLocs = PickLock.yamlLocations.get(lockID);
+		for (Location loc : locs) {
+			lastLoc = lastLoc+1;
+			savedLocs.add( loc.getWorld().getName() + ", " + loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ() );
+			PickLock.locks.getConfig().set("locks." + lockID + ".location" + lastLoc, loc.getWorld().getName() + ", " + loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ());
+		}
+		PickLock.locks.saveConfig();		
+		PickLock.yamlLocations.remove(lockID);
+		PickLock.yamlLocations.put(lockID, savedLocs);
+	}
 }

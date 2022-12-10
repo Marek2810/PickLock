@@ -22,13 +22,14 @@ import me.Marek2810.PickLock.Files.DataManager;
 import me.Marek2810.PickLock.Listener.BlockListener;
 import me.Marek2810.PickLock.Listener.ClickNoKey;
 import me.Marek2810.PickLock.Listener.ClickWithKey;
+import me.Marek2810.PickLock.Listener.PlaceSecBlockListener;
 import me.Marek2810.PickLock.Listener.RedstoneListener;
 import net.md_5.bungee.api.ChatColor;
 
 public class PickLock extends JavaPlugin implements Listener {
 
     public static PickLock inst;   
-    public static DataManager data;
+    public static DataManager locks;
 	public static LockCommand lockCMD;
 	
 	public static ConsoleCommandSender console;
@@ -47,7 +48,7 @@ public class PickLock extends JavaPlugin implements Listener {
     public void onEnable() {
     	inst = this;    	
     	console = this.getServer().getConsoleSender();
-    	data = new DataManager(this, "locks.yml");
+    	locks = new DataManager(this, "locks.yml");
     	this.saveDefaultConfig();
     	this.getCommand("picklock").setExecutor(new PickLockCommand());
     	this.getCommand("key").setExecutor(new KeyCommand());
@@ -59,6 +60,7 @@ public class PickLock extends JavaPlugin implements Listener {
 		this.getServer().getPluginManager().registerEvents(new PlayerListener(), this);
 		this.getServer().getPluginManager().registerEvents(new RemoveCmdListener(), this);
 		this.getServer().getPluginManager().registerEvents(new RedstoneListener(), this);
+		this.getServer().getPluginManager().registerEvents(new PlaceSecBlockListener(), this);
 		
 		this.getServer().getPluginManager().registerEvents(new BlockListener(), this);
 		this.getServer().getPluginManager().registerEvents(new ClickNoKey(), this);
@@ -71,20 +73,20 @@ public class PickLock extends JavaPlugin implements Listener {
     	doors = this.getConfig().getStringList("locking.doors");
     	trapdoors = this.getConfig().getStringList("locking.trapdoors");
     	console.sendMessage(ChatColor.translateAlternateColorCodes('&', logPrefix + "&aLoaded blocks to lcoks."));
-    	if (data.getConfig().getConfigurationSection("locks") != null) {
+    	if (locks.getConfig().getConfigurationSection("locks") != null) {
     		//Loading locked blocks
     		console.sendMessage(ChatColor.translateAlternateColorCodes('&', logPrefix + "&eLoading locked blocks..."));
-        	yamlKeys = data.getConfig().getConfigurationSection("locks").getKeys(false);
+        	yamlKeys = locks.getConfig().getConfigurationSection("locks").getKeys(false);
         	if (yamlKeys != null) {
         		for (String lockID : yamlKeys) {
-	        		yamlIsLocked.put(lockID, data.getConfig().getBoolean("locks." + lockID + ".locked") );
-	        		yamlKeyID.put(lockID, data.getConfig().getInt("locks." + lockID + ".keyID"));
-	        		yamlKeyType.put(lockID, data.getConfig().getString("locks." + lockID + ".keyType"));
+	        		yamlIsLocked.put(lockID, locks.getConfig().getBoolean("locks." + lockID + ".locked") );
+	        		yamlKeyID.put(lockID, locks.getConfig().getInt("locks." + lockID + ".keyID"));
+	        		yamlKeyType.put(lockID, locks.getConfig().getString("locks." + lockID + ".keyType"));
 	        		List<Object> locs = new ArrayList<Object>();
 	        		for (int i = 1; i <= 4; i++ ) {
-	        			Object get = data.getConfig().get("locks." + lockID + ".location" + i);	        			
+	        			Object get = locks.getConfig().get("locks." + lockID + ".location" + i);	        			
 	        			if (get != null ) {
-	        				locs.add(data.getConfig().get("locks." + lockID + ".location" + i));
+	        				locs.add(locks.getConfig().get("locks." + lockID + ".location" + i));
 	        			}
 	        			else {
 	        				break;

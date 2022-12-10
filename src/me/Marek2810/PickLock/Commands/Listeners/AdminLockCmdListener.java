@@ -30,8 +30,8 @@ public class AdminLockCmdListener implements Listener {
         		//lock
 				String lockID = LockUtils.getLockID( event.getClickedBlock().getLocation() );
 				PickLock.yamlIsLocked.replace(lockID, true);
-        		PickLock.data.getConfig().set("locks." + lockID + ".locked", true);
-        		PickLock.data.saveConfig();
+        		PickLock.locks.getConfig().set("locks." + lockID + ".locked", true);
+        		PickLock.locks.saveConfig();
         		String msg = PickLock.inst.getConfig().getString("messages.on-lock");
         		player.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
         		LockCommand.adminLock.remove(player);
