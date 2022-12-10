@@ -25,35 +25,26 @@ public class PlaceSecBlockListener implements Listener {
 		if ( !(LockUtils.isLockable(block.getType().toString())) ) return;
 		Player player = event.getPlayer();
 		if ( DoorsUtils.isDoubleDoor(block) ) {
-			player.sendMessage(ChatColor.GREEN + "Double doorz");
 			Location fistHalfLoc = DoorsUtils.getSecondDoor(block).getLocation();
-			if ( LockUtils.hasLock(fistHalfLoc) ) {
-				player.sendMessage("yup");
-				if (PickLock.locks.getConfig().get("locks." + LockUtils.getLockID(fistHalfLoc) + ".location3") == null ) {
-					//add doors
-					player.sendMessage("doors true");
-					List<Location> locs = new ArrayList<Location>();
-					locs.add(block.getLocation());
-					locs.add(DoorsUtils.getSecondDoorHlaf(block));
-					LockUtils.addLocationToLock(LockUtils.getLockID(fistHalfLoc), locs, 2);
-					player.sendMessage(ChatColor.GREEN + "doors done");
-				}
-			}
+			if ( !(LockUtils.hasLock(fistHalfLoc)) ) return;
+			if ( PickLock.locks.getConfig().get("locks." + LockUtils.getLockID(fistHalfLoc) + ".location3") != null ) return;
+			//add doors
+			List<Location> locs = new ArrayList<Location>();
+			locs.add(block.getLocation());
+			locs.add(DoorsUtils.getSecondDoorHlaf(block));
+			LockUtils.addLocationToLock(LockUtils.getLockID(fistHalfLoc), locs, 2);
+			player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&aDvere úspešne pridané k zámku."));
 		}
 		else if ( ChestsUtils.isDoubleChest(block)) {
-			player.sendMessage(ChatColor.GREEN + "Double chest");
 			Location firstChestLoc = ChestsUtils.getSecondChest(block);
-			if ( LockUtils.hasLock(firstChestLoc) ) {
-				player.sendMessage("yup");
-				if (PickLock.locks.getConfig().get("locks." + LockUtils.getLockID(firstChestLoc) + ".location2") == null ) {
-					//add chest
-					player.sendMessage("chest true");
-					List<Location> locs = new ArrayList<Location>();
-					locs.add(block.getLocation());
-					LockUtils.addLocationToLock(LockUtils.getLockID(firstChestLoc), locs, 1);
-					player.sendMessage(ChatColor.GREEN + "chests done");
-				}
-			}
+			if ( !(LockUtils.hasLock(firstChestLoc)) ) return;
+			if ( !(LockUtils.hasLock(firstChestLoc)) ) return;
+			if ( PickLock.locks.getConfig().get("locks." + LockUtils.getLockID(firstChestLoc) + ".location2") != null ) return; 
+			//add chest
+			List<Location> locs = new ArrayList<Location>();
+			locs.add(block.getLocation());
+			LockUtils.addLocationToLock(LockUtils.getLockID(firstChestLoc), locs, 1);
+			player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&aTruhla úspešne pridaná k zámku."));			
 		}
 	}
 }
