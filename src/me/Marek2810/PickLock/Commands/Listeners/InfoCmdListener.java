@@ -10,7 +10,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 import me.Marek2810.PickLock.PickLock;
 import me.Marek2810.PickLock.Commands.LockCommand;
-import me.Marek2810.PickLock.Utils.Format;
+import me.Marek2810.PickLock.Utils.FormatUtils;
 import me.Marek2810.PickLock.Utils.LockUtils;
 import net.md_5.bungee.api.ChatColor;
 
@@ -33,7 +33,7 @@ public class InfoCmdListener implements Listener {
 					"&7------------ \n"
 					+ "&aLockID: &e" + lockID + "\n"
 					+ "&aOwner: &e" 
-						+ Format.UUIDtoName(lock.getString("owner")) 
+						+ FormatUtils.UUIDtoName(lock.getString("owner")) 
 						+ "\n" 
 					+ "&aKey type: &e" + lock.getString("keyType") + "\n" 
 					+ "&aKey ID: &e" + lock.getInt("keyID") + "\n"
@@ -41,7 +41,7 @@ public class InfoCmdListener implements Listener {
 					+ "&7------------"));				
 			PickLock.console.sendMessage(ChatColor.translateAlternateColorCodes('&',
 					PickLock.logPrefix + "&aHráč &6" + player.getName() + " &azistil informácie o zámku &6ID: &e"
-					+ lockID + " &ana súradniciach &6" + Format.getLocation(loc) + "&a."));
+					+ lockID + " &ana súradniciach &6" + FormatUtils.getLocation(loc) + "&a."));
 			LockCommand.infoLock.remove(player);
 			return;
 		}		

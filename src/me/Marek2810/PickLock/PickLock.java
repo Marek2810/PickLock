@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -31,6 +32,7 @@ public class PickLock extends JavaPlugin implements Listener {
     public static PickLock inst;   
     public static DataManager locks;
 	public static LockCommand lockCMD;
+	public static boolean rp;
 	
 	public static ConsoleCommandSender console;
 	public static String logPrefix;
@@ -45,9 +47,10 @@ public class PickLock extends JavaPlugin implements Listener {
     public static HashMap<String, List<Object>> yamlLocations = new HashMap<String, List<Object>>();  
     
     @Override
-    public void onEnable() {
+    public void onEnable() {    	
+    	rp = false;
     	inst = this;    	
-    	console = this.getServer().getConsoleSender();
+    	console = this.getServer().getConsoleSender();    	
     	locks = new DataManager(this, "locks.yml");
     	this.saveDefaultConfig();
     	this.getCommand("picklock").setExecutor(new PickLockCommand());
@@ -95,6 +98,10 @@ public class PickLock extends JavaPlugin implements Listener {
 	        		yamlLocations.put(lockID, locs);
 	        	}
             	console.sendMessage(ChatColor.translateAlternateColorCodes('&', logPrefix + "&aLoaded locked blocks."));
+            	
+            	if(Bukkit.getPluginManager().getPlugin("RoleEngine") != null) {
+                    rp = true;
+            	}
 	        }
         }
     }

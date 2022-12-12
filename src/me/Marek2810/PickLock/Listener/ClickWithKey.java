@@ -16,7 +16,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import me.Marek2810.PickLock.PickLock;
 import me.Marek2810.PickLock.Utils.ChestsUtils;
 import me.Marek2810.PickLock.Utils.DoorsUtils;
-import me.Marek2810.PickLock.Utils.Format;
+import me.Marek2810.PickLock.Utils.FormatUtils;
 import me.Marek2810.PickLock.Utils.KeyUtils;
 import me.Marek2810.PickLock.Utils.LockUtils;
 import net.md_5.bungee.api.ChatColor;
@@ -32,7 +32,7 @@ public class ClickWithKey implements Listener {
         if ( !(LockUtils.isLockable(typeOfClickeBlock)) ) return;
         Location loc = event.getClickedBlock().getLocation();
         ItemStack itemInMainHand = player.getInventory().getItemInMainHand();
-        String formatedLoc = Format.getLocation(loc);
+        String formatedLoc = FormatUtils.getLocation(loc);
         if (KeyUtils.isKey(player.getInventory().getItemInMainHand())) {   			
         	//Have lock
 			if ( LockUtils.hasLock(event.getClickedBlock().getLocation() ) ) {

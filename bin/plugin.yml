@@ -3,6 +3,7 @@ name: PickLock
 version: 1.2
 author: Marek2810
 api-version: 1.17
+softdepend: [RoleEngine]
 
 commands:
   picklock:

@@ -25,6 +25,8 @@ messages:
   need-to-hold-key: "&cMusíš v ruke držať kľúč."
   to-lock: "&eKlikni pravým tlačítkem na zámek pro zamknutí."
   to-unlock: "&eKlikni pravým tlačítkem na zámek pro odemknutí."
+  cannot-be-placed-door: "&cSem to nemôžeš položiť."
+  cannot-be-placed-chest: "&cNie je možné spraviť dvojtruhlu z truhly zo zámkom."
   
 keys:
   basic:

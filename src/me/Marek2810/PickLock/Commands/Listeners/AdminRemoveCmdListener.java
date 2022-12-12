@@ -9,7 +9,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 import me.Marek2810.PickLock.PickLock;
 import me.Marek2810.PickLock.Commands.LockCommand;
-import me.Marek2810.PickLock.Utils.Format;
+import me.Marek2810.PickLock.Utils.FormatUtils;
 import me.Marek2810.PickLock.Utils.LockUtils;
 import net.md_5.bungee.api.ChatColor;
 
@@ -33,7 +33,7 @@ public class AdminRemoveCmdListener implements Listener {
 			event.setCancelled(true);	
 			PickLock.console.sendMessage(ChatColor.translateAlternateColorCodes('&',
 					PickLock.logPrefix + "&cAdmin &6" + player.getName() + " &aodstránil zámok &6ID: &e" 
-					+ lockID + " &ana súradniciach &6" + Format.getLocation(loc) + "&a."));
+					+ lockID + " &ana súradniciach &6" + FormatUtils.getLocation(loc) + "&a."));
 			LockCommand.adminRemovingLock.remove(player);
 			return;							
 		}
