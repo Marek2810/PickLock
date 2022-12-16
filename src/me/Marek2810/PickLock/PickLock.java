@@ -97,13 +97,13 @@ public class PickLock extends JavaPlugin implements Listener {
 	        		}
 	        		yamlLocations.put(lockID, locs);
 	        	}
-            	console.sendMessage(ChatColor.translateAlternateColorCodes('&', logPrefix + "&aLoaded locked blocks."));
-            	
-            	if(Bukkit.getPluginManager().getPlugin("RoleEngine") != null) {
-                    rp = true;
-            	}
+            	console.sendMessage(ChatColor.translateAlternateColorCodes('&', logPrefix + "&aLoaded locked blocks."));   	
 	        }
         }
+    	if(Bukkit.getPluginManager().getPlugin("RoleEngine") != null) {
+    		console.sendMessage(ChatColor.RED + "RP acitavated");
+            rp = true;
+    	}
     }
 
     @Override

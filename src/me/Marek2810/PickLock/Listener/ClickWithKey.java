@@ -19,6 +19,7 @@ import me.Marek2810.PickLock.Utils.DoorsUtils;
 import me.Marek2810.PickLock.Utils.FormatUtils;
 import me.Marek2810.PickLock.Utils.KeyUtils;
 import me.Marek2810.PickLock.Utils.LockUtils;
+import me.Marek2810.RoleEngine.Utils.CharacterUtils;
 import net.md_5.bungee.api.ChatColor;
 
 public class ClickWithKey implements Listener {
@@ -104,7 +105,11 @@ public class ClickWithKey implements Listener {
     				return;
 				}
 				else {
-					//Make a lock	        					
+					//Make a lock	        
+					if (CharacterUtils.activeChar.get(player) == null) {
+						player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cMusíš si zvloiť postavu aby si mohol nasadiť zámok."));
+						return;
+					}
 					ArrayList<Location> lockLocations = new ArrayList<Location>();		    					
 					lockLocations.add( event.getClickedBlock().getLocation() );		    					
     				if (PickLock.chests.contains( event.getClickedBlock().getType().toString() )) {
@@ -119,7 +124,7 @@ public class ClickWithKey implements Listener {
     						lockLocations.add( secDoorBlock.getLocation() );
     						lockLocations.add( DoorsUtils.getSecondDoorHlaf( secDoorBlock ) );
     					}			    					
-    				}
+    				}    				
     				LockUtils.makeLock(event, lockLocations);	                                                                       
                     String msg = PickLock.inst.getConfig().getString("messages.on-first-lock");
                     player.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
