@@ -9,16 +9,16 @@ import java.util.logging.Level;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import me.Marek2810.PickLock.Main;
+import me.Marek2810.PickLock.PickLock;
 
 public class DataManager {
 	
-	private Main plugin;
+	private PickLock plugin;
 	private FileConfiguration dataConfig = null;
 	private File configFile = null;
 	private String name;
 	
-	public DataManager(Main plugin, String name) {
+	public DataManager(PickLock plugin, String name) {
 		this.plugin = plugin;
 		this.name = name;
 		saveDefaultConfig();
