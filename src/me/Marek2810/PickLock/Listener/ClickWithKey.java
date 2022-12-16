@@ -14,6 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import me.Marek2810.PickLock.PickLock;
+import me.Marek2810.PickLock.Utils.ChatUtils;
 import me.Marek2810.PickLock.Utils.ChestsUtils;
 import me.Marek2810.PickLock.Utils.DoorsUtils;
 import me.Marek2810.PickLock.Utils.FormatUtils;
@@ -29,6 +30,7 @@ public class ClickWithKey implements Listener {
 		if ( !(event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) ) return;
 		if ( event.getClickedBlock() == null ) return;
        	Player player = (Player) event.getPlayer();
+       	if (ChatUtils.activeCommandActions(player)) return;
         String typeOfClickeBlock = event.getClickedBlock().getType().toString();	        
         if ( !(LockUtils.isLockable(typeOfClickeBlock)) ) return;
         Location loc = event.getClickedBlock().getLocation();
