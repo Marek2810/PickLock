@@ -267,16 +267,19 @@ public class LockpickUtils {
    
    public static void addXP(int playerLevel, double baseXP, int pinsCount, double xpPinMult, double xpLevelMult, Player player) {
 	   	double xp = getXP(playerLevel, baseXP, pinsCount, xpPinMult, xpLevelMult);
-		double playerXP = PickLock.playerData.getConfig().getDouble("players." + player.getUniqueId().toString() + ".xp");
-		PickLock.playerData.getConfig().set("players." + player.getUniqueId().toString() + ".xp", playerXP+xp);				
-		PickLock.playerData.saveConfig();
+	   	setXP(player, xp);
    }
    
    public static void removeXP(int playerLevel, double baseXP, int pinsCount, double xpPinMult, double xpLevelMult, Player player) {
 	   double xp = getXP(playerLevel, baseXP, pinsCount, xpPinMult, xpLevelMult);
 	   xp *= -0.5;
-	   double playerXP = PickLock.playerData.getConfig().getDouble("players." + player.getUniqueId().toString() + ".xp");
-	   PickLock.playerData.getConfig().set("players." + player.getUniqueId().toString() + ".xp", playerXP+xp);				
+	   setXP(player, xp);   
+   }
+   
+   private static void setXP(Player player, double xp) {
+	   String playerYAMLpath = getPlayerFilePath(player);
+	   double playerXP = PickLock.playerData.getConfig().getDouble(playerYAMLpath + ".xp");
+	   PickLock.playerData.getConfig().set(playerYAMLpath + ".xp", playerXP+xp);				
 	   PickLock.playerData.saveConfig();
    }
 	
