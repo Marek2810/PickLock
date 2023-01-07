@@ -123,7 +123,7 @@ public class LockpickUtils {
 	
 	public static Boolean isHook(ItemStack item) {
     	String mat = item.getType().toString();       	
-    	if (mat == "AIR") return false;    	
+    	if (mat == "AIR" || mat == null) return false;    	
     	ConfigurationSection hooks = PickLock.inst.getConfig().getConfigurationSection("hooks");
         for (String hook : hooks.getKeys(false)) {
         	if ( !(hooks.getString(hook + ".material").equals(mat)) ) continue;
@@ -271,8 +271,7 @@ public class LockpickUtils {
    }
    
    public static void removeXP(int playerLevel, double baseXP, int pinsCount, double xpPinMult, double xpLevelMult, Player player) {
-	   double xp = getXP(playerLevel, baseXP, pinsCount, xpPinMult, xpLevelMult);
-	   xp *= -0.5;
+	   double xp = getXP(playerLevel, baseXP, pinsCount, xpPinMult, xpLevelMult) * -0.5;
 	   setXP(player, xp);   
    }
    
