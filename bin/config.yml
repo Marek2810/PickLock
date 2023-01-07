@@ -20,7 +20,7 @@ messages:
   on-brake-with-lock: "&cNemůžeš zničit zamčenou truhlu/dveře."
   to-remove-lock: "&eKlini pravým tlačítkem na odstranění zámku."  
   remove-lock: "&aZámek byl úspěšně odstraněný."
-  remove-lock-not-owned: "&cNemůžeš odstranit zámek, který ti nepatří"
+  remove-lock-not-owned: "&cNemůžeš odstranit zámek, který ti nepatří."
   to-lock-info: "&eKlikni pravým tlačítkem na zámek pro více informací."
   need-to-hold-key: "&cMusíš v ruke držať kľúč."
   to-lock: "&eKlikni pravým tlačítkem na zámek pro zamknutí."
@@ -42,10 +42,10 @@ lockpicking:
       - "&bporadí pre otvorenie zámku."
   options:
     levels: 150
-    base-lockpick-chance: 97
-    lockpick-pin-multipler: 1.05
-    lockpick-level-multipler: 0.995
-    base-succes-xp: 1.5
+    base-xp: 1.5
+    base-broke-hook-chance: 97
+    broke-hook-level-multipler: 0.995
+    broke-hook-pin-multipler: 1.05
     xp-level-multipler: 1.015
     xp-pin-multipler: 1.05
   

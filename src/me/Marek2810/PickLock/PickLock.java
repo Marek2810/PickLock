@@ -20,17 +20,23 @@ import me.Marek2810.PickLock.Commands.Listeners.InfoCmdListener;
 import me.Marek2810.PickLock.Commands.Listeners.PlayerListener;
 import me.Marek2810.PickLock.Commands.Listeners.RemoveCmdListener;
 import me.Marek2810.PickLock.Files.DataManager;
-import me.Marek2810.PickLock.Listener.BlockListener;
+import me.Marek2810.PickLock.Listener.BlockBreakListener;
 import me.Marek2810.PickLock.Listener.ClickNoKey;
 import me.Marek2810.PickLock.Listener.ClickWithKey;
 import me.Marek2810.PickLock.Listener.PlaceSecBlockListener;
 import me.Marek2810.PickLock.Listener.RedstoneListener;
+import me.Marek2810.PickLock.Lockpick.ClickWithHookListener;
+import me.Marek2810.PickLock.Lockpick.HookCommand;
+import me.Marek2810.PickLock.Lockpick.LockpickGUIlistener;
+import me.Marek2810.PickLock.Lockpick.LockpickPlayerListener;
+import me.Marek2810.PickLock.Lockpick.LockpickUtils;
 import net.md_5.bungee.api.ChatColor;
 
 public class PickLock extends JavaPlugin implements Listener {
 
     public static PickLock inst;   
     public static DataManager locks;
+    public static DataManager playerData;
 	public static LockCommand lockCMD;
 	public static boolean rp;
 	
@@ -52,22 +58,29 @@ public class PickLock extends JavaPlugin implements Listener {
     	inst = this;    	
     	console = this.getServer().getConsoleSender();    	
     	locks = new DataManager(this, "locks.yml");
+    	playerData = new DataManager(this, "data.yml");
     	this.saveDefaultConfig();
     	this.getCommand("picklock").setExecutor(new PickLockCommand());
     	this.getCommand("key").setExecutor(new KeyCommand());
 		this.getCommand("lock").setExecutor(new LockCommand());
-		this.getServer().getPluginManager().registerEvents(new AdminLockCmdListener(), this);
-		this.getServer().getPluginManager().registerEvents(new AdminRemoveCmdListener(), this);
-		this.getServer().getPluginManager().registerEvents(new AdminUnlockCmdListener(), this);
-		this.getServer().getPluginManager().registerEvents(new InfoCmdListener(), this);
-		this.getServer().getPluginManager().registerEvents(new PlayerListener(), this);
-		this.getServer().getPluginManager().registerEvents(new RemoveCmdListener(), this);
+		this.getCommand("hook").setExecutor(new HookCommand());						
 		this.getServer().getPluginManager().registerEvents(new RedstoneListener(), this);
 		this.getServer().getPluginManager().registerEvents(new PlaceSecBlockListener(), this);
 		
-		this.getServer().getPluginManager().registerEvents(new BlockListener(), this);
+		this.getServer().getPluginManager().registerEvents(new BlockBreakListener(), this);
 		this.getServer().getPluginManager().registerEvents(new ClickNoKey(), this);
 		this.getServer().getPluginManager().registerEvents(new ClickWithKey(), this);
+		
+		this.getServer().getPluginManager().registerEvents(new AdminLockCmdListener(), this);
+		this.getServer().getPluginManager().registerEvents(new AdminRemoveCmdListener(), this);
+		this.getServer().getPluginManager().registerEvents(new AdminUnlockCmdListener(), this);
+		this.getServer().getPluginManager().registerEvents(new InfoCmdListener(), this);		
+		this.getServer().getPluginManager().registerEvents(new RemoveCmdListener(), this);
+		this.getServer().getPluginManager().registerEvents(new PlayerListener(), this);
+		
+		this.getServer().getPluginManager().registerEvents(new LockpickPlayerListener(), this);
+		this.getServer().getPluginManager().registerEvents(new ClickWithHookListener(), this);		
+		this.getServer().getPluginManager().registerEvents(new LockpickGUIlistener(), this);
 		
     	logPrefix = "&7[&6PickLock&7] ";
     	//loading block to locks
@@ -100,6 +113,7 @@ public class PickLock extends JavaPlugin implements Listener {
             	console.sendMessage(ChatColor.translateAlternateColorCodes('&', logPrefix + "&aLoaded locked blocks."));   	
 	        }
         }
+    	LockpickUtils.generateLevels();
     	if(Bukkit.getPluginManager().getPlugin("RoleEngine") != null) {
     		console.sendMessage(ChatColor.RED + "RP acitavated");
             rp = true;

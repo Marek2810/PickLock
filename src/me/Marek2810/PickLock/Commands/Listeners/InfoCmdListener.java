@@ -4,6 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -16,8 +17,8 @@ import net.md_5.bungee.api.ChatColor;
 
 public class InfoCmdListener implements Listener {
 	
-	@EventHandler
-	public void onClick(PlayerInteractEvent event) {
+	@EventHandler(priority = EventPriority.HIGH)
+	public void onClick(PlayerInteractEvent event) {		
 		if ( !(event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) ) return;
 		if ( event.getClickedBlock() == null ) return;
        	Player player = (Player) event.getPlayer();

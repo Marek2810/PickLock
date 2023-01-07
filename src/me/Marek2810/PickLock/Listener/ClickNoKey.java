@@ -21,9 +21,9 @@ public class ClickNoKey implements Listener {
 		if ( !(event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) ) return;
 		if ( event.getClickedBlock() == null ) return;
        	Player player = (Player) event.getPlayer();
-       	if (ChatUtils.activeCommandActions(player)) return;
-        String typeOfClickeBlock = event.getClickedBlock().getType().toString();	        
-        if ( !(LockUtils.isLockable(typeOfClickeBlock)) ) return;
+       	String typeOfClickeBlock = event.getClickedBlock().getType().toString();	 
+       	if ( !(LockUtils.isLockable(typeOfClickeBlock)) ) return;
+       	if (ChatUtils.activeCommandActions(player)) return;        
         ItemStack itemInMainHand = player.getInventory().getItemInMainHand();
         if (KeyUtils.isKey(itemInMainHand)) return;
         Location loc = event.getClickedBlock().getLocation();   

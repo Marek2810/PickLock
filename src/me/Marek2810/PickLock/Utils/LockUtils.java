@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 import me.Marek2810.PickLock.PickLock;
+import me.Marek2810.PickLock.Lockpick.LockpickUtils;
 import me.Marek2810.RoleEngine.Utils.CharacterUtils;
 import net.md_5.bungee.api.ChatColor;
 
@@ -121,6 +122,10 @@ public class LockUtils {
         PickLock.locks.getConfig().set("locks." + lockID + ".keyID", keyID);
         //locked
         PickLock.locks.getConfig().set("locks." + lockID + ".locked", true);
+        //lockpikc
+        PickLock.locks.getConfig().set("locks." + lockID + ".lockPath", LockpickUtils.getLockPath(
+        		LockpickUtils.getLockPickDiff(event.getPlayer().getInventory().getItemInMainHand())) );
+        
 		PickLock.locks.saveConfig();		
 		PickLock.yamlKeys = PickLock.locks.getConfig().getConfigurationSection("locks").getKeys(false);
     	PickLock.yamlIsLocked.put(sLockID, true);

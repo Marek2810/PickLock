@@ -2,6 +2,7 @@ package me.Marek2810.PickLock.Commands.Listeners;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 
@@ -9,7 +10,7 @@ import me.Marek2810.PickLock.Commands.LockCommand;
 
 public class PlayerListener implements Listener {
 	
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGH)
 	public static void onPlayerQuit (PlayerQuitEvent event) {
 		Player player = (Player) event.getPlayer();
 		if (LockCommand.removingLock.containsKey(player)) LockCommand.removingLock.remove(player);		

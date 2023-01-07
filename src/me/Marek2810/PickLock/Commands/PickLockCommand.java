@@ -5,6 +5,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 import me.Marek2810.PickLock.PickLock;
+import me.Marek2810.PickLock.Lockpick.LockpickUtils;
 import me.Marek2810.PickLock.Utils.ChatUtils;
 import net.md_5.bungee.api.ChatColor;
 
@@ -27,8 +28,8 @@ public class PickLockCommand implements CommandExecutor {
         			}        			
     			}
     			else if (args[0].equalsIgnoreCase("levels")) {
-    				Main.lockpick.generateLevels();
-    				Main.console.sendMessage(ChatColor.GREEN + "DONE!");
+    				LockpickUtils.generateLevels();
+    				PickLock.console.sendMessage(ChatColor.GREEN + "DONE!");
     				return true;
     			}
     			else {

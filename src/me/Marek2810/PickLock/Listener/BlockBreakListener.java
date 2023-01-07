@@ -10,7 +10,7 @@ import me.Marek2810.PickLock.PickLock;
 import me.Marek2810.PickLock.Utils.LockUtils;
 import net.md_5.bungee.api.ChatColor;
 
-public class BlockListener implements Listener {
+public class BlockBreakListener implements Listener {
 
 	@EventHandler
 	 public void onBlockBreak(BlockBreakEvent event) {
