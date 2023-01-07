@@ -159,11 +159,17 @@ public class LockpickUtils {
 	   	}
    }
    
-   public static double getPlayerXP(Player player) {
+   private static String getPlayerFilePath(Player player) {
 	   String path = "players." + player.getUniqueId().toString();
 	   if (PickLock.rp) {
 		   path = "players." + player.getUniqueId().toString() + "." + CharacterUtils.activeChar.get(player);
-	   }
+	   }	   
+	   return path;
+   }
+   
+   
+   public static double getPlayerXP(Player player) {
+	   String path = getPlayerFilePath(player);
 	   if (PickLock.playerData.getConfig().get(path + ".xp") == null ){
 		   PickLock.playerData.getConfig().set(path + ".xp", 0.0);
 		   PickLock.playerData.saveConfig();
